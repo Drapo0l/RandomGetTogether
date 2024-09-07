@@ -742,13 +742,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 766617938}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.23327903, y: -0, z: -0, w: 0.97240984}
-  m_LocalPosition: {x: -18.19, y: 2.09, z: 0.07}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0.22449654, y: -0, z: -0, w: 0.97447497}
+  m_LocalPosition: {x: -18.19, y: 1.9999998, z: 0.65}
+  m_LocalScale: {x: 1, y: 1, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -26.98, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -25.947, y: 0, z: 0}
 --- !u!1 &780176777
 GameObject:
   m_ObjectHideFlags: 0
@@ -1468,6 +1468,7 @@ GameObject:
   - component: {fileID: 1953015311}
   - component: {fileID: 1953015310}
   - component: {fileID: 1953015312}
+  - component: {fileID: 1953015313}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1559,10 +1560,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 7
   sprintSpeed: 12
+  slideSpeed: 0
   dashSpeed: 20
   dashSpeedChangeFactor: 50
+  speedIncreaseMultiplier: 1.5
+  slopeIncreaseMultiplier: 2.5
   maxYSpeed: 0
-  groundDrag: 5
+  groundDrag: 4
   jumpForce: 2
   jumpCooldown: 0.25
   airMultiplier: 0.1
@@ -1570,7 +1574,7 @@ MonoBehaviour:
   crouchYScale: 0.5
   jumpKey: 32
   sprintKey: 304
-  crouchKey: 306
+  crouchKey: 99
   playerHeight: 2
   whatIsGround:
     serializedVersion: 2
@@ -1578,6 +1582,7 @@ MonoBehaviour:
   maxSlopeAngle: 60
   orientation: {fileID: 780176778}
   state: 0
+  sliding: 0
   dashing: 0
 --- !u!54 &1953015311
 Rigidbody:
@@ -1620,7 +1625,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orientation: {fileID: 1840686174}
   playerCam: {fileID: 963194228}
-  dashForce: 20
+  dashForce: 2
   dashUpwardForce: 0
   maxDashYSpeed: 0
   dashDuration: 0.25
@@ -1632,6 +1637,24 @@ MonoBehaviour:
   resetVel: 1
   dashCd: 1.5
   dashKey: 101
+--- !u!114 &1953015313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1953015303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 536c22314395ae04c9b3c3c2851b56e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  orientation: {fileID: 1840686174}
+  playerobj: {fileID: 1554733214}
+  maxSlideTime: 0.75
+  slideForce: 2
+  slideYScale: 0.5
+  slideKey: 113
 --- !u!1 &1965328733
 GameObject:
   m_ObjectHideFlags: 0
@@ -1733,7 +1756,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.32680082, y: -0, z: -0, w: 0.9450932}
   m_LocalPosition: {x: -8.02, y: 2.09, z: 0.069999985}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 10}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
