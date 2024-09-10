@@ -48,6 +48,7 @@ public class PlayerMovement : MonoBehaviour
     private bool exitingSlope;
     
     public Transform orientation;
+    private bool isShooting = false;
 
     float horizontalInput;
     float verticalInput;
@@ -345,7 +346,6 @@ public class PlayerMovement : MonoBehaviour
     {
         return Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
     }
-
 
 
 }
