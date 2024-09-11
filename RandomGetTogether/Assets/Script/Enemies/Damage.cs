@@ -45,7 +45,7 @@ public class Damage : MonoBehaviour
 
             Invoke("resetInvincibility", 2);
         }
-
+         
     }
 
     private void OnTriggerStay(Collider other)
