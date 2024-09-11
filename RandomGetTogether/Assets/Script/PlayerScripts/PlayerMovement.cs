@@ -48,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
     private bool exitingSlope;
     
     public Transform orientation;
-    private bool isShooting = false;
+    //private bool isShooting = false;
 
     float horizontalInput;
     float verticalInput;
