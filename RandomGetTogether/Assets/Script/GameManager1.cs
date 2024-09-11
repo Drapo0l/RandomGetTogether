@@ -6,13 +6,16 @@ public class GameManager : MonoBehaviour
 {
 
     public static GameManager Instance;
-
+    public GameObject Player;
+    public PlayerMovement PlayerScript;        
     int enemyCount;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         Instance = this;
+        Player = GameObject.FindWithTag("Player");
+        PlayerScript = Player.GetComponent<PlayerMovement>(); 
     }
 
     // Update is called once per frame
