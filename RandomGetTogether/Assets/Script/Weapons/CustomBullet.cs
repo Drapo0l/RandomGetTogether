@@ -63,7 +63,7 @@ public class CustomBullet : MonoBehaviour
         Invoke("Delay", 0.05f);
     }
 
-    private void NormalShot(GameObject target)
+    private IEnumerator NormalShot(GameObject target)
     {
         if (target.tag == "Player")
         {        
@@ -81,6 +81,8 @@ public class CustomBullet : MonoBehaviour
         {
             target.GetComponent<EnemyHealth>().health -= bulletDamage;
             target.GetComponent<Renderer>().material.color = Color.red;
+            yield return new WaitForSeconds(.1f);
+            target.GetComponent<Renderer>().material.color = Color.white;
 
             if (target.GetComponent<EnemyHealth>().health <= 0)
             {
@@ -101,9 +103,10 @@ public class CustomBullet : MonoBehaviour
     {
         //explode if bullet hit an enemy directly and explodeOnTouch is true
         if (collision.collider.CompareTag("Enemy") && explodeOnTouch) Explode();
-        else if (collision.collider.CompareTag("Enemy") && !explodeOnTouch) NormalShot(collision.gameObject);
+        else if (collision.collider.CompareTag("Enemy") && !explodeOnTouch) StartCoroutine(NormalShot(collision.gameObject));
         else if (collision.collider.CompareTag("Player") && explodeOnTouch) Explode();
-        else if (collision.collider.CompareTag("Player") && !explodeOnTouch) NormalShot(collision.gameObject);
+        else if (collision.collider.tag == "Player" && !explodeOnTouch) StartCoroutine(NormalShot(collision.gameObject));
+        
 
         //don't count collisions with other bullets
         if (collision.collider.CompareTag("Bullet"))return;
@@ -135,10 +138,5 @@ public class CustomBullet : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, explosionRange);
     }
 
-    IEnumerator flashColor(Renderer Model, Color colorOrig)
-    {
-        Model.material.color = Color.red;
-        yield return new WaitForSeconds(1f);
-        Model.material.color = colorOrig;
-    }
+   
 }

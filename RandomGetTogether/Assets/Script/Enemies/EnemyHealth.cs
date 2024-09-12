@@ -7,7 +7,7 @@ public class EnemyHealth : MonoBehaviour
     public float health;
     public float maxHealth;
     [SerializeField] Renderer Model;
-    Color colorOrig;
+    public Color colorOrig;
     
 
 
