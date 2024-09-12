@@ -96,7 +96,7 @@ public class TeleportShooter : MonoBehaviour, DamageFE
         Agent.SetDestination(playerChara.position);
 
     }
-    private void Shooting()
+    IEnumerator Shooting()
     {
         //enemy does not move
         Agent.SetDestination(transform.position);

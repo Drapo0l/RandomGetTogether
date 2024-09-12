@@ -6,7 +6,7 @@ using TMPro;
 
 
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour   
 {
     [SerializeField] GameObject Menu_Active; 
     [SerializeField] GameObject Menu_Win; 
@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     public bool paused;  
     float timeScale_OG; 
     public GameObject TeleportAnchor;  
-    public PlayerMovement PlayerScript;        
+ 
     int enemyCount;
 
     // Start is called before the first frame update
