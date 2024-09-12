@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    public float health;
+    public float maxHealth;
+
+
     [Header("Movement")]
     private float moveSpeed;
     public float walkSpeed;
