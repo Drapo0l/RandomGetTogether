@@ -51,11 +51,8 @@ public class TeleportShooter : MonoBehaviour, DamageFE
             CHASE(); 
         }
         if (IsinSight && Isshooting)
-        {
-         
-            StartCoroutine(Shooting());
-            Teleport();
-
+        {         
+            Shooting();
         }
     }
     public void Patroling()
@@ -93,20 +90,32 @@ public class TeleportShooter : MonoBehaviour, DamageFE
         Agent.SetDestination(playerChara.position);
         Teleport();
     }
-    IEnumerator Shooting()
+    private void Shooting()
     {
+        //enemy does not move
         Agent.SetDestination(transform.position);
-        transform.LookAt(playerChara); 
-        Isshooting = true;
-        Instantiate(Bullet, Shotpostion.position, transform.rotation);
-        yield return new WaitForSeconds(shootrate);
-        Isshooting = false;
+        transform.LookAt(playerChara);
 
-        //if (!Isshooting)
-        //{
-        //    Isshooting = true;
-        //    Invoke(nameof(ResetShooting), timebetween); 
-        //}
+        if (!Isshooting)
+        {
+            //attack code 
+            // Instantiate the bullet
+            GameObject bulletInstance = Instantiate(Bullet, transform.position, Quaternion.identity);
+            Rigidbody body = bulletInstance.GetComponent<Rigidbody>();
+
+            Collider enemyCollider = GetComponent<Collider>();
+            Collider bulletCollider = bulletInstance.GetComponent<Collider>();
+            //enemy no shoot himself
+            Physics.IgnoreCollision(enemyCollider, bulletCollider);
+
+            body.AddForce(transform.forward * 32f, ForceMode.Impulse);
+            body.AddForce(transform.up * 8f, ForceMode.Impulse);
+
+
+            //
+            Isshooting = true;
+            Invoke(nameof(ResetShooting), shootrate);
+        }
     } 
     void Teleport()
     {

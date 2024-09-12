@@ -49,6 +49,10 @@ public class FodderEnemy : MonoBehaviour, DamageFE
         if(player.gameObject.CompareTag("Player"))
         {
             player.gameObject.GetComponent<PlayerMovement>().takeDamge(damage);
+            if (player.gameObject.GetComponent<PlayerMovement>().health <= 0)
+            {
+
+            }
         }
     }
 

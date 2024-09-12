@@ -80,7 +80,7 @@ public class CustomBullet : MonoBehaviour
         else if (target.tag == "Enemy")
         {
             target.GetComponent<EnemyHealth>().health -= bulletDamage;
-            //target.GetComponent<EnemyHealth>().flashColor();
+            target.GetComponent<Renderer>().material.color = Color.red;
 
             if (target.GetComponent<EnemyHealth>().health <= 0)
             {
@@ -134,5 +134,11 @@ public class CustomBullet : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, explosionRange);
     }
-   
+
+    IEnumerator flashColor(Renderer Model, Color colorOrig)
+    {
+        Model.material.color = Color.red;
+        yield return new WaitForSeconds(1f);
+        Model.material.color = colorOrig;
+    }
 }

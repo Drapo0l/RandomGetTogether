@@ -8,6 +8,7 @@ public class EnemyHealth : MonoBehaviour
     public float maxHealth;
     [SerializeField] Renderer Model;
     Color colorOrig;
+    
 
 
     // Start is called before the first frame update
