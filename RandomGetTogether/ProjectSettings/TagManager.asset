@@ -3,17 +3,20 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Shooter
+  - Bullet
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
-  - 
-  - 
+  - Shooter
+  - Fodder
+  - Telport Shooter
   - 
   - WhatIsGround
   - 
