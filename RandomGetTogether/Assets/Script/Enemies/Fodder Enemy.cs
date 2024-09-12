@@ -5,6 +5,7 @@ using UnityEngine.AI;
 
 public class FodderEnemy : MonoBehaviour, DamageFE
 {
+    public int damage;
     [SerializeField] Renderer Model;
     [SerializeField] int HP;
     public NavMeshAgent agent;
@@ -40,6 +41,18 @@ public class FodderEnemy : MonoBehaviour, DamageFE
         if (isinSight)
         {
             Chase();
+        }
+    }
+
+    private void OnCollisionEnter(Collision player)
+    {
+        if(player.gameObject.CompareTag("Player"))
+        {
+            player.gameObject.GetComponent<PlayerMovement>().takeDamge(damage);
+            if (player.gameObject.GetComponent<PlayerMovement>().health <= 0)
+            {
+
+            }
         }
     }
 

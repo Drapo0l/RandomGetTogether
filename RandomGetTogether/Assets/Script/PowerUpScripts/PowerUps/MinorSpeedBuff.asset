@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd21ae816511a9047824aa3793eaa132, type: 3}
   m_Name: MinorSpeedBuff
   m_EditorClassIdentifier: 
-  amount: 2
+  amount: 8
