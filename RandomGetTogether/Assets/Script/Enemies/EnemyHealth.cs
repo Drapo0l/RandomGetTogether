@@ -2,15 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerHealth : MonoBehaviour
+public class EnemyHealth : MonoBehaviour
 {
     public float health;
     public float maxHealth;
+    [SerializeField] Renderer Model;
+    Color colorOrig;
+
 
     // Start is called before the first frame update
     void Start()
     {
         maxHealth = health;
+
+        colorOrig = Model.material.color;
     }
 
     public void TakeDamage(int amount)
@@ -21,4 +26,11 @@ public class PlayerHealth : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    IEnumerator flashColor()
+    {
+        Model.material.color = Color.red;
+        yield return new WaitForSeconds(1f);
+        Model.material.color = colorOrig;
+    }
+
 }

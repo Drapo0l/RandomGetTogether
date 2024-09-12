@@ -8,7 +8,7 @@ public class HealthBuff : PowerUpEffects
     public float amount;
     public override void Apply(GameObject target)
     {
-        target.transform.parent.GetComponent<PlayerHealth>().health += amount;
+        target.transform.parent.GetComponent<PlayerMovement>().health += amount;
     }
 
 
