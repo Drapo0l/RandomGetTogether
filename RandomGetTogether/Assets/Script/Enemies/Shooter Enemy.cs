@@ -14,7 +14,7 @@ public class ShooterEnemy : MonoBehaviour, DamageFE
     [SerializeField] GameObject Bullet;
     [SerializeField] float shootrate;
     Color colorOrig;
-    bool Isshooting;
+    bool Isshooting; 
     public LayerMask Ground, WherePlayer;
     //Patroling
     public Vector3 WalkPoint;
