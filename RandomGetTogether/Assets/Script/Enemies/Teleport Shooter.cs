@@ -15,6 +15,7 @@ public class TeleportShooter : MonoBehaviour, DamageFE
     Color colorOrig;
     public NavMeshAgent Agent;
     public Transform playerChara;
+    [SerializeField] Transform Anchor;  
     public LayerMask Ground, WherePlayer;
     //Patroling
     public Vector3 WalkingPoint;
@@ -24,6 +25,7 @@ public class TeleportShooter : MonoBehaviour, DamageFE
 
     //States
     [SerializeField] float SightRange;
+    [SerializeField] float Shootrange;
     bool IsinSight; 
     // range
     public float Xrange;
@@ -33,6 +35,7 @@ public class TeleportShooter : MonoBehaviour, DamageFE
     {
         colorOrig = Model.material.color;
         playerChara = GameObject.Find("Player").transform;
+        Anchor = GameObject.Find("SpawnPoint").transform;     
         Agent = GetComponent<NavMeshAgent>(); 
     }
 
@@ -40,7 +43,7 @@ public class TeleportShooter : MonoBehaviour, DamageFE
     void Update()
     {
         IsinSight = Physics.CheckSphere(transform.position, SightRange, WherePlayer);
-        Isshooting = Physics.CheckSphere(transform.position, shootrate, WherePlayer);    
+        Isshooting = Physics.CheckSphere(transform.position, Shootrange, WherePlayer);    
         if (!IsinSight && !Isshooting)
         {
             Patroling();
@@ -54,7 +57,7 @@ public class TeleportShooter : MonoBehaviour, DamageFE
         {
          
             StartCoroutine(Shooting());
-            Teleport();
+  
 
         }
     }
@@ -91,7 +94,7 @@ public class TeleportShooter : MonoBehaviour, DamageFE
     public void CHASE()
     {
         Agent.SetDestination(playerChara.position);
-        Teleport();
+
     }
     IEnumerator Shooting()
     {
@@ -102,11 +105,6 @@ public class TeleportShooter : MonoBehaviour, DamageFE
         yield return new WaitForSeconds(shootrate);
         Isshooting = false;
 
-        //if (!Isshooting)
-        //{
-        //    Isshooting = true;
-        //    Invoke(nameof(ResetShooting), timebetween); 
-        //}
     } 
     void Teleport()
     {
@@ -114,7 +112,7 @@ public class TeleportShooter : MonoBehaviour, DamageFE
         float Y = Random.Range(0, Yrange);
         float Z = Random.Range(-Zrange, Zrange);
         transform.position = new Vector3(X, Y, Z);
-        transform.LookAt(GameManager.Instance.Player.transform);
+        transform.LookAt(GameManager.Instance.TeleportAnchor.transform); 
     }
 
     IEnumerator flashColor()
@@ -127,6 +125,7 @@ public class TeleportShooter : MonoBehaviour, DamageFE
     {
         HP -= amount;
         flashColor();
+        Teleport();
         if (HP <= 0)
         {
             Destroy(gameObject);

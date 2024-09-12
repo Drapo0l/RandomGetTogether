@@ -37,12 +37,6 @@ public class ShooterEnemy : MonoBehaviour, DamageFE
     // Update is called once per frame
     void Update()
     {
-
-        //Agent.SetDestination(GameManager.Instance.Player.transform.position);        
-        //if (!Isshooting)
-        //{
-        //    StartCoroutine(shooting());
-        //}
         isinSight = Physics.CheckSphere(transform.position, Sightrange, WherePlayer);
         isinRange = Physics.CheckSphere(transform.position, Shootrange, WherePlayer);
 
@@ -57,58 +51,22 @@ public class ShooterEnemy : MonoBehaviour, DamageFE
         }
         if (isinSight && isinRange)
         {
-            Shooting();
+            StartCoroutine( Shooting());  
 
         }
 
     }
 
-    //private void shooting()
-    //{
-    //    Agent.SetDestination(transform.position);
-    //    transform.LookAt(Player);
-
-    //    if (!Isshooting)
-    //    {
-    //        Debug.Log("Shooting");
-    //        //  Debug.Log("Shooting");
-    //        //Shooting(); 
-    //        //Isshooting = true;
-
-    //        Rigidbody rb = Instantiate(Bullet, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
-    //        rb.AddForce(transform.forward * 32, ForceMode.Impulse);
-    //        rb.AddForce(transform.forward * 8f, ForceMode.Impulse);
-    //        Isshooting = true; 
-
-    //    }
-    //}
-
-    private void Shooting()
+   
+    IEnumerator Shooting()
     {
-        //enemy does not move
         Agent.SetDestination(transform.position);
         transform.LookAt(Player);
+        Isshooting = true;
+        Instantiate(Bullet, Shotpostion.position, transform.rotation);
+        yield return new WaitForSeconds(shootrate);
+        Isshooting = false;
 
-        if (!Isshooting)
-        {
-            //attack code 
-            // Instantiate the bullet
-            GameObject bulletInstance = Instantiate(Bullet, transform.position, Quaternion.identity);
-            Rigidbody body = bulletInstance.GetComponent<Rigidbody>();
-
-            Collider enemyCollider = GetComponent<Collider>();
-            Collider bulletCollider = bulletInstance.GetComponent<Collider>();
-            //enemy no shoot himself
-            Physics.IgnoreCollision(enemyCollider, bulletCollider);
-
-            body.AddForce(transform.forward * 32f, ForceMode.Impulse);
-            body.AddForce(transform.up * 8f, ForceMode.Impulse);
-
-
-            //
-            Isshooting = true;
-            Invoke(nameof(ResetShooting), shootrate);
-        }
     }
     IEnumerator flashColor()
     {
