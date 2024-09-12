@@ -1,14 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 public class ShopUI : MonoBehaviour
 {
     [SerializeField] Canvas StoreFront;
     [SerializeField] GameObject playerPrompt;
-    [SerializeField] GameObject[] shopItems;
+    [SerializeField] GameObject StoreMenu;
+    [SerializeField] GameObject Shop;
+    [SerializeField] GameObject Inventory;
+    [SerializeField] GameObject InventorySlot;
+    [SerializeField] shopItems[] items;
+    
+    
 
-   public bool isOpen = false;
+   bool isOpen = false;
 
 
     // Start is called before the first frame update
@@ -16,9 +23,24 @@ public class ShopUI : MonoBehaviour
     {
         StoreFront.gameObject.SetActive(false);
         playerPrompt.SetActive(false);
+        showShop();
+        
         //Make sure the shop is inactive
     }
 
+    void showShop()
+    {
+        for (int i = StoreMenu.transform.childCount - 1; i >= 0; i--)
+        {
+            Destroy(StoreMenu.transform.GetChild(i).gameObject);
+        }
+
+        for (int i = 0; i < items.Length; i++)
+        {
+            GameObject slot = Instantiate(InventorySlot, StoreMenu.transform);
+
+        }
+    }
     // Update is called once per frame
     void Update()
     {
@@ -36,7 +58,7 @@ public class ShopUI : MonoBehaviour
 
     }
 
-    private void OnTriggerStay(Collider other)
+    void OnTriggerStay(Collider other)
     {
         if(other.gameObject.CompareTag("Player"))
         {
@@ -44,7 +66,7 @@ public class ShopUI : MonoBehaviour
         }
     }//Show prompt if shop is not open
 
-    private void OnTriggerEnter(Collider other)
+     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
@@ -53,7 +75,7 @@ public class ShopUI : MonoBehaviour
         //Show prompt when player enters trigger area
     }
 
-    private void OnTriggerExit(Collider other)
+    void OnTriggerExit(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {
@@ -63,7 +85,7 @@ public class ShopUI : MonoBehaviour
     }
 
 
-    private void OpenShop()
+     void OpenShop()
     {
         isOpen = true;
         StoreFront.gameObject.SetActive(true);
@@ -72,7 +94,7 @@ public class ShopUI : MonoBehaviour
     }// show shop
 
 
-    private void CloseShop()
+     void CloseShop()
     {
         isOpen = false;
         StoreFront.gameObject.SetActive(false);
