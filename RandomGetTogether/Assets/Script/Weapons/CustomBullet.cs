@@ -70,6 +70,7 @@ public class CustomBullet : MonoBehaviour
             
             
             PlayerMovement player = target.GetComponent<PlayerMovement>();
+            GameManager.Instance.dmgflash();
             player.health -= bulletDamage;
             if (player.health <= 0)
             {
