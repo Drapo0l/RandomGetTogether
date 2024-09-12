@@ -1,9 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class gameShop : MonoBehaviour
+public class shopItems : MonoBehaviour
 {
+    public string itemName;
+    public int xp;
+    
+
+
+
+
     // Start is called before the first frame update
     void Start()
     {
