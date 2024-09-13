@@ -22,15 +22,18 @@ public class GameManager : MonoBehaviour
     public CustomBullet Player_Dmg;
     int Enemy_Count;
     public bool paused;  
-    float timeScale_OG; 
+    float timeScale_OG;
+    float health_OG;
     // Start is called before the first frame update
     void Awake()
     {
        
         Instance = this;
-        timeScale_OG = Time.timeScale;
+        timeScale_OG = Time.timeScale;    
         Player = GameObject.FindWithTag("Player");
-        PlayerScript = Player.GetComponent<PlayerMovement>(); 
+        PlayerScript = Player.GetComponent<PlayerMovement>();
+        health_OG = PlayerScript.health;
+
     }
 
     // Update is called once per frame
@@ -97,4 +100,8 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         DMG_Screen.SetActive(false);
     }
+    public void updatePlayerUI()
+    {
+        Player_HP_Bar.fillAmount = (float)PlayerScript.health / health_OG;
+      }
 }

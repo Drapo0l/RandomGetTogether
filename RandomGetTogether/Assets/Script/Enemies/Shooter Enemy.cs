@@ -3,25 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class ShooterEnemy : MonoBehaviour, DamageFE
+public class ShooterEnemy : MonoBehaviour, iDamage
 {
-    [SerializeField] Renderer Model;
-
-    public NavMeshAgent Agent;
-    [SerializeField] Transform Shotpostion;
+    [Header("Basics")]    
+    public NavMeshAgent Agent;   
     [SerializeField] int HP;
+    [SerializeField] Renderer Model;
     public Transform Player;
+    public LayerMask Ground, WherePlayer;
+
+    [Header("Bullet")]
+    [SerializeField] Transform Shotpostion;
     [SerializeField] GameObject Bullet;
     [SerializeField] float shootrate;
+    [SerializeField] float shootForce;
+    [SerializeField] float shootUpForce;
     Color colorOrig;
     bool Isshooting; 
-    public LayerMask Ground, WherePlayer;
+    
     //Patroling
+    [Header("Patroll")]
     public Vector3 WalkPoint;
     bool IsWalking;
     [SerializeField] float walkpointRange;
 
     //States
+    [Header("States")]
     [SerializeField] float Sightrange;
     [SerializeField] float Shootrange;
     bool isinSight;
@@ -101,8 +108,8 @@ public class ShooterEnemy : MonoBehaviour, DamageFE
             //enemy no shoot himself
             Physics.IgnoreCollision(enemyCollider, bulletCollider);
 
-            body.AddForce(transform.forward * 32f, ForceMode.Impulse);
-            body.AddForce(transform.up * 8f, ForceMode.Impulse);
+            body.AddForce(transform.forward * shootForce, ForceMode.Impulse);
+            body.AddForce(transform.up * shootUpForce, ForceMode.Impulse);
 
 
             //
@@ -113,12 +120,14 @@ public class ShooterEnemy : MonoBehaviour, DamageFE
     IEnumerator flashColor()
     {
         Model.material.color = Color.red;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(.15f);
         Model.material.color = colorOrig;
     }
-    public void takeDamge(int amount)
+    public void takeDamage(int amount)
     {
+        
         HP -= amount;
+        StartCoroutine(flashColor());
         flashColor();
         if (HP <= 0)
         {

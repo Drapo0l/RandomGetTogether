@@ -92,21 +92,33 @@ public class ProjectileWeapons : MonoBehaviour
         //Calculate direction from attackingPoint to target
         Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
 
-        //Calc spread
-        float x = Random.Range(-spread, spread);
-        float y = Random.Range(-spread, spread);
+        // Declare finalDirection outside the if statement
+        Vector3 finalDirection;
 
-        //apply spread to player direction
-        Vector3 directionWithSpread = fpsCam.transform.forward + new Vector3(x, y, 0); //Just add spread to last direction
+        if (spread > 0)
+        {
+            //Calc spread
+            float x = Random.Range(-spread, spread);
+            float y = Random.Range(-spread, spread);
 
-        // Normalize the direction with spread
-        directionWithSpread = directionWithSpread.normalized;
+            //apply spread to player direction
+            Vector3 directionWithSpread = fpsCam.transform.forward + new Vector3(x, y, 0); //Just add spread to last direction
+
+            // Normalize the direction with spread
+            finalDirection = directionWithSpread.normalized;
+
+        }
+        else
+        {
+            // If spread is 0, use the exact direction without modifying it
+            finalDirection = directionWithoutSpread.normalized;
+        }
 
         //Instantiate bullet/projectile
         GameObject currentBullet = Instantiate(bullet, attackPoint.position, Quaternion.identity);
 
         //Roatate bullet to shoot direction
-        currentBullet.transform.forward = directionWithSpread.normalized;
+        currentBullet.transform.forward = finalDirection.normalized;
 
         // Get the bullet's collider
         Collider bulletCollider = currentBullet.GetComponent<Collider>();
@@ -117,7 +129,7 @@ public class ProjectileWeapons : MonoBehaviour
         }
 
         //Add forces to bullet
-        currentBullet.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
+        currentBullet.GetComponent<Rigidbody>().AddForce(finalDirection.normalized * shootForce, ForceMode.Impulse);
         currentBullet.GetComponent<Rigidbody>().AddForce(fpsCam.transform.up * upwardForce, ForceMode.Impulse);
       
 
@@ -135,7 +147,7 @@ public class ProjectileWeapons : MonoBehaviour
             allowInvoke = false;
 
             //add recoil to player
-            playerRb.AddForce(-directionWithSpread.normalized * RecoilForce, ForceMode.Impulse);
+            playerRb.AddForce(-finalDirection.normalized * RecoilForce, ForceMode.Impulse);
         }
 
         //if more than one bulletPerTap make sure to repeat shoot func
