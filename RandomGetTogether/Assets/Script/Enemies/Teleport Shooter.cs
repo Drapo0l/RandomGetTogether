@@ -12,6 +12,7 @@ public class TeleportShooter : MonoBehaviour, iDamage
     Color colorOrig;
     public NavMeshAgent Agent;
     public Transform playerChara;
+    [SerializeField] Transform Anchor;  
     public LayerMask Ground, WherePlayer;
 
     [Header("Bullet")]
@@ -30,6 +31,8 @@ public class TeleportShooter : MonoBehaviour, iDamage
 
     [Header("Range")]
     [SerializeField] float SightRange;
+    [SerializeField] float Shootrange;
+   
     public float Xrange;
     public float Yrange;
     public float Zrange;
@@ -39,6 +42,7 @@ public class TeleportShooter : MonoBehaviour, iDamage
     {
         colorOrig = Model.material.color;
         playerChara = GameObject.Find("Player").transform;
+        Anchor = GameObject.Find("SpawnPoint").transform;     
         Agent = GetComponent<NavMeshAgent>(); 
     }
 
@@ -46,7 +50,7 @@ public class TeleportShooter : MonoBehaviour, iDamage
     void Update()
     {
         IsinSight = Physics.CheckSphere(transform.position, SightRange, WherePlayer);
-        Isshooting = Physics.CheckSphere(transform.position, shootrate, WherePlayer);    
+        Isshooting = Physics.CheckSphere(transform.position, Shootrange, WherePlayer);    
         if (!IsinSight && !Isshooting)
         {
             Patroling();
@@ -57,8 +61,11 @@ public class TeleportShooter : MonoBehaviour, iDamage
             CHASE(); 
         }
         if (IsinSight && Isshooting)
-        {         
-            Shooting();
+        {
+         
+           Shooting();
+  
+
         }
     }
     public void Patroling()
@@ -94,33 +101,51 @@ public class TeleportShooter : MonoBehaviour, iDamage
     public void CHASE()
     {
         Agent.SetDestination(playerChara.position);
-        Teleport();
+
     }
     private void Shooting()
     {
-        //enemy does not move
-        Agent.SetDestination(transform.position);
-        transform.LookAt(playerChara);
-
-        if (!Isshooting)
+        // Check for a clear line of sight before shooting
+        RaycastHit hit;
+        Vector3 directionToPlayer = playerChara.position - transform.position;
+        // Perform the raycast to check for obstacles between enemy and player
+        if (Physics.Raycast(transform.position, directionToPlayer, out hit, Shootrange))
         {
-            //attack code 
-            // Instantiate the bullet
-            GameObject bulletInstance = Instantiate(Bullet, transform.position, Quaternion.identity);
-            Rigidbody body = bulletInstance.GetComponent<Rigidbody>();
+            // Check if the raycast hit the player
+            if (hit.transform.CompareTag("Player"))
+            {
+                // Make the enemy face the player
+                Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f); // Smooth rotation
 
-            Collider enemyCollider = GetComponent<Collider>();
-            Collider bulletCollider = bulletInstance.GetComponent<Collider>();
-            //enemy no shoot himself
-            Physics.IgnoreCollision(enemyCollider, bulletCollider);
+                Agent.SetDestination(playerChara.position);
+                if (!Isshooting)
+                {
+                    // Calculate the direction towards the player
+                    Vector3 shootDirection = (playerChara.position - Shotpostion.position).normalized;
 
-            body.AddForce(transform.forward * shootForce, ForceMode.Impulse);
-            body.AddForce(transform.up * shootUpForce, ForceMode.Impulse);
+                    // Instantiate the bullet
+                    GameObject bulletInstance = Instantiate(Bullet, Shotpostion.position, Quaternion.identity);
+                    Rigidbody body = bulletInstance.GetComponent<Rigidbody>();
+
+                    Collider enemyCollider = GetComponent<Collider>();
+                    Collider bulletCollider = bulletInstance.GetComponent<Collider>();
+
+                    // Ignore collision between enemy and bullet
+                    Physics.IgnoreCollision(enemyCollider, bulletCollider);
+
+                    //enemy no shoot himself
+                    Physics.IgnoreCollision(enemyCollider, bulletCollider);
+
+                    body.AddForce(shootDirection * shootForce, ForceMode.Impulse);
+                    body.AddForce(transform.up * shootUpForce, ForceMode.Impulse);
 
 
-            //
-            Isshooting = true;
-            Invoke(nameof(ResetShooting), shootrate);
+                    //
+                    Isshooting = true;
+                    Invoke(nameof(ResetShooting), shootrate);
+                }
+            }
         }
     } 
     void Teleport()
@@ -129,7 +154,7 @@ public class TeleportShooter : MonoBehaviour, iDamage
         float Y = Random.Range(0, Yrange);
         float Z = Random.Range(-Zrange, Zrange);
         transform.position = new Vector3(X, Y, Z);
-        transform.LookAt(GameManager.Instance.Player.transform);
+        transform.LookAt(GameManager.Instance.TeleportAnchor.transform); 
     }
 
     IEnumerator flashColor()
@@ -143,6 +168,7 @@ public class TeleportShooter : MonoBehaviour, iDamage
         HP -= amount;
         StartCoroutine(flashColor());
         flashColor();
+        Teleport();
         if (HP <= 0)
         {
             Destroy(gameObject);

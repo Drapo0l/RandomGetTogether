@@ -6,7 +6,7 @@ using TMPro;
 
 
 
-public class GameManager : MonoBehaviour
+public class GameManager : MonoBehaviour   
 {
     [SerializeField] GameObject Menu_Active; 
     [SerializeField] GameObject Menu_Win; 
@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     public bool paused;  
     float timeScale_OG;
     float health_OG;
+    public GameObject TeleportAnchor;
     // Start is called before the first frame update
     void Awake()
     {

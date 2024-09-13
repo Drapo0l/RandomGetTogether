@@ -44,12 +44,6 @@ public class ShooterEnemy : MonoBehaviour, iDamage
     // Update is called once per frame
     void Update()
     {
-
-        //Agent.SetDestination(GameManager.Instance.Player.transform.position);        
-        //if (!Isshooting)
-        //{
-        //    StartCoroutine(shooting());
-        //}
         isinSight = Physics.CheckSphere(transform.position, Sightrange, WherePlayer);
         isinRange = Physics.CheckSphere(transform.position, Shootrange, WherePlayer);
 
@@ -64,57 +58,56 @@ public class ShooterEnemy : MonoBehaviour, iDamage
         }
         if (isinSight && isinRange)
         {
-            Shooting();
+            Shooting();  
 
         }
 
     }
 
-    //private void shooting()
-    //{
-    //    Agent.SetDestination(transform.position);
-    //    transform.LookAt(Player);
-
-    //    if (!Isshooting)
-    //    {
-    //        Debug.Log("Shooting");
-    //        //  Debug.Log("Shooting");
-    //        //Shooting(); 
-    //        //Isshooting = true;
-
-    //        Rigidbody rb = Instantiate(Bullet, transform.position, Quaternion.identity).GetComponent<Rigidbody>();
-    //        rb.AddForce(transform.forward * 32, ForceMode.Impulse);
-    //        rb.AddForce(transform.forward * 8f, ForceMode.Impulse);
-    //        Isshooting = true; 
-
-    //    }
-    //}
-
+   
     private void Shooting()
     {
-        //enemy does not move
-        Agent.SetDestination(transform.position);
-        transform.LookAt(Player);
-
-        if (!Isshooting)
+        // Check for a clear line of sight before shooting
+        RaycastHit hit;
+        Vector3 directionToPlayer = Player.position - transform.position;
+        // Perform the raycast to check for obstacles between enemy and player
+        if (Physics.Raycast(transform.position, directionToPlayer, out hit, Shootrange))
         {
-            //attack code 
-            // Instantiate the bullet
-            GameObject bulletInstance = Instantiate(Bullet, transform.position, Quaternion.identity);
-            Rigidbody body = bulletInstance.GetComponent<Rigidbody>();
+            // Check if the raycast hit the player
+            if (hit.transform.CompareTag("Player"))
+            {
+                // Make the enemy face the player
+                Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f); // Smooth rotation
 
-            Collider enemyCollider = GetComponent<Collider>();
-            Collider bulletCollider = bulletInstance.GetComponent<Collider>();
-            //enemy no shoot himself
-            Physics.IgnoreCollision(enemyCollider, bulletCollider);
+                Agent.SetDestination(Player.position);
+                if (!Isshooting)
+                {
+                    // Calculate the direction towards the player
+                    Vector3 shootDirection = (Player.position - Shotpostion.position).normalized;
 
-            body.AddForce(transform.forward * shootForce, ForceMode.Impulse);
-            body.AddForce(transform.up * shootUpForce, ForceMode.Impulse);
+                    // Instantiate the bullet
+                    GameObject bulletInstance = Instantiate(Bullet, Shotpostion.position, Quaternion.identity);
+                    Rigidbody body = bulletInstance.GetComponent<Rigidbody>();
+
+                    Collider enemyCollider = GetComponent<Collider>();
+                    Collider bulletCollider = bulletInstance.GetComponent<Collider>();
+
+                    // Ignore collision between enemy and bullet
+                    Physics.IgnoreCollision(enemyCollider, bulletCollider);
+
+                    //enemy no shoot himself
+                    Physics.IgnoreCollision(enemyCollider, bulletCollider);
+
+                    body.AddForce(shootDirection * shootForce, ForceMode.Impulse);
+                    body.AddForce(transform.up * shootUpForce, ForceMode.Impulse);
 
 
-            //
-            Isshooting = true;
-            Invoke(nameof(ResetShooting), shootrate);
+                    //
+                    Isshooting = true;
+                    Invoke(nameof(ResetShooting), shootrate);
+                }
+            }
         }
     }
     IEnumerator flashColor()
@@ -176,11 +169,5 @@ public class ShooterEnemy : MonoBehaviour, iDamage
         Isshooting = false;
     }
 
-    //private void OnDrawGizmosSelected()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawWireSphere(transform.position, Shootrange);
-    //    Gizmos.color = Color.yellow;
-    //    Gizmos.DrawWireSphere(transform.position, Sightrange);
-    //}
+   
 }

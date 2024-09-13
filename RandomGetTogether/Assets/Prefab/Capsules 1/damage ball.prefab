@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b50cf73900862b47a7d898923994ff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectOfAttraction: {fileID: 746716826381158926, guid: 10c1f4f83969af94ca056cdde1685d4d, type: 3}
+  objectOfAttraction: {fileID: 6655308304098412751, guid: 4d69df1e9cd049d48a6257264f42494e, type: 3}
   attractionType: 0
   attractionStrength: 100
   useSqrtOfDistance: 0
