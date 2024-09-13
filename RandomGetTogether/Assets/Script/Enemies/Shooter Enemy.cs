@@ -3,25 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class ShooterEnemy : MonoBehaviour, DamageFE
+public class ShooterEnemy : MonoBehaviour, iDamage
 {
-    [SerializeField] Renderer Model;
-
-    public NavMeshAgent Agent;
-    [SerializeField] Transform Shotpostion;
+    [Header("Basics")]    
+    public NavMeshAgent Agent;   
     [SerializeField] int HP;
+    [SerializeField] Renderer Model;
     public Transform Player;
+    public LayerMask Ground, WherePlayer;
+
+    [Header("Bullet")]
+    [SerializeField] Transform Shotpostion;
     [SerializeField] GameObject Bullet;
     [SerializeField] float shootrate;
+    [SerializeField] float shootForce;
+    [SerializeField] float shootUpForce;
     Color colorOrig;
     bool Isshooting; 
-    public LayerMask Ground, WherePlayer;
+    
     //Patroling
+    [Header("Patroll")]
     public Vector3 WalkPoint;
     bool IsWalking;
     [SerializeField] float walkpointRange;
 
     //States
+    [Header("States")]
     [SerializeField] float Sightrange;
     [SerializeField] float Shootrange;
     bool isinSight;
@@ -51,32 +58,69 @@ public class ShooterEnemy : MonoBehaviour, DamageFE
         }
         if (isinSight && isinRange)
         {
-            StartCoroutine( Shooting());  
+            Shooting();  
 
         }
 
     }
 
    
-    IEnumerator Shooting()
+    private void Shooting()
     {
-        Agent.SetDestination(transform.position);
-        transform.LookAt(Player);
-        Isshooting = true;
-        Instantiate(Bullet, Shotpostion.position, transform.rotation);
-        yield return new WaitForSeconds(shootrate);
-        Isshooting = false;
+        // Check for a clear line of sight before shooting
+        RaycastHit hit;
+        Vector3 directionToPlayer = Player.position - transform.position;
+        // Perform the raycast to check for obstacles between enemy and player
+        if (Physics.Raycast(transform.position, directionToPlayer, out hit, Shootrange))
+        {
+            // Check if the raycast hit the player
+            if (hit.transform.CompareTag("Player"))
+            {
+                // Make the enemy face the player
+                Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f); // Smooth rotation
 
+                Agent.SetDestination(Player.position);
+                if (!Isshooting)
+                {
+                    // Calculate the direction towards the player
+                    Vector3 shootDirection = (Player.position - Shotpostion.position).normalized;
+
+                    // Instantiate the bullet
+                    GameObject bulletInstance = Instantiate(Bullet, Shotpostion.position, Quaternion.identity);
+                    Rigidbody body = bulletInstance.GetComponent<Rigidbody>();
+
+                    Collider enemyCollider = GetComponent<Collider>();
+                    Collider bulletCollider = bulletInstance.GetComponent<Collider>();
+
+                    // Ignore collision between enemy and bullet
+                    Physics.IgnoreCollision(enemyCollider, bulletCollider);
+
+                    //enemy no shoot himself
+                    Physics.IgnoreCollision(enemyCollider, bulletCollider);
+
+                    body.AddForce(shootDirection * shootForce, ForceMode.Impulse);
+                    body.AddForce(transform.up * shootUpForce, ForceMode.Impulse);
+
+
+                    //
+                    Isshooting = true;
+                    Invoke(nameof(ResetShooting), shootrate);
+                }
+            }
+        }
     }
     IEnumerator flashColor()
     {
         Model.material.color = Color.red;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(.15f);
         Model.material.color = colorOrig;
     }
-    public void takeDamge(int amount)
+    public void takeDamage(int amount)
     {
+        
         HP -= amount;
+        StartCoroutine(flashColor());
         flashColor();
         if (HP <= 0)
         {
@@ -125,11 +169,5 @@ public class ShooterEnemy : MonoBehaviour, DamageFE
         Isshooting = false;
     }
 
-    //private void OnDrawGizmosSelected()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawWireSphere(transform.position, Shootrange);
-    //    Gizmos.color = Color.yellow;
-    //    Gizmos.DrawWireSphere(transform.position, Sightrange);
-    //}
+   
 }
