@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class FodderEnemy : MonoBehaviour, iDamage
+public class FodderEnemy : MonoBehaviour, DamageFE
 {
     public int damage;
     [SerializeField] Renderer Model;
@@ -45,12 +45,26 @@ public class FodderEnemy : MonoBehaviour, iDamage
     }
 
     private void OnCollisionEnter(Collision player)
-    {   
-        iDamage dmg = player.collider.GetComponentInParent<iDamage>();
-        if (dmg != null)
+    {
+        if(player.gameObject.CompareTag("Player"))
         {
-            dmg.takeDamage(damage);
+            player.gameObject.GetComponent<PlayerMovement>().takeDamge(damage);
+            if (player.gameObject.GetComponent<PlayerMovement>().health <= 0)
+            {
+
+            }
         }
+    }
+
+    public void takeDamge(int amount)
+    {
+        HP -= amount;
+        flashColor();
+        if (HP <= 0)
+        {
+            Destroy(gameObject);
+        }
+
     }
     public void Patroling()
     { 
@@ -90,26 +104,15 @@ public class FodderEnemy : MonoBehaviour, iDamage
     IEnumerator flashColor()
     {
         Model.material.color = Color.red;
-        yield return new WaitForSeconds(.15f);
+        yield return new WaitForSeconds(1f);
         Model.material.color = colorOrig;
-    }
-
-    public void takeDamage(int amount)
-    {
-        HP -= amount;
-        StartCoroutine(flashColor());
-        if (HP <= 0)
-        {
-            Destroy(gameObject);
-        }
-
     }
 
     //private void OnTriggerEnter(Collider other)
     //{
     //    if (other.gameObject.tag == "Player")
     //    {
-
+           
     //    }
     //}
 

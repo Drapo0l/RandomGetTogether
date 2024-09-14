@@ -19,7 +19,7 @@ public class CustomBullet : MonoBehaviour
     public int explosionDamage;
     public float explosionRange;
     public float explosionForce;
-    public int bulletDamage;
+    public float bulletDamage;
 
     //lifetime
     public int maxCollision;
@@ -61,31 +61,52 @@ public class CustomBullet : MonoBehaviour
         }
         // add a little delay to make sure things work
         Invoke("Delay", 0.05f);
-    }    
+    }
+
+    private IEnumerator NormalShot(GameObject target)
+    {
+        if (target.tag == "Player")
+        {        
+            
+            
+            PlayerMovement player = target.GetComponent<PlayerMovement>();
+            GameManager.Instance.dmgflash();
+            player.health -= bulletDamage;
+            if (player.health <= 0)
+            {
+                Destroy(target);
+            }           
+            
+        }
+        else if (target.tag == "Enemy")
+        {
+            target.GetComponent<EnemyHealth>().health -= bulletDamage;
+            target.GetComponent<Renderer>().material.color = Color.red;
+            yield return new WaitForSeconds(.1f);
+            target.GetComponent<Renderer>().material.color = Color.white;
+
+            if (target.GetComponent<EnemyHealth>().health <= 0)
+            {
+                Destroy(target);               
+            }
+        }
+        Destroy(gameObject);
+        // add a little delay to make sure things work
+        Invoke("Delay", 0.05f);
+    }
 
     private void Delay()
     {
         Destroy(gameObject);
     }
 
-    private void NormalShot(Collision target)
-    {
-        iDamage dmg = target.collider.GetComponent<iDamage>();
-        if (dmg == null) dmg = target.collider.GetComponentInParent<iDamage>();
-        if (dmg != null) 
-        {
-            dmg.takeDamage(bulletDamage);
-            Destroy(gameObject);
-        }
-        
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         //explode if bullet hit an enemy directly and explodeOnTouch is true
-        if (explodeOnTouch) Explode();
-        else NormalShot(collision);
-        
+        if (collision.collider.CompareTag("Enemy") && explodeOnTouch) Explode();
+        else if (collision.collider.CompareTag("Enemy") && !explodeOnTouch) StartCoroutine(NormalShot(collision.gameObject));
+        else if (collision.collider.CompareTag("Player") && explodeOnTouch) Explode();
+        else if (collision.collider.tag == "Player" && !explodeOnTouch) StartCoroutine(NormalShot(collision.gameObject));
         
 
         //don't count collisions with other bullets

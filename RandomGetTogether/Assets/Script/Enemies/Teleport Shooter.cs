@@ -4,40 +4,33 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class TeleportShooter : MonoBehaviour, iDamage
+public class TeleportShooter : MonoBehaviour, DamageFE
 {
-    [Header("Basics")]
     [SerializeField] Renderer Model;
+    [SerializeField] GameObject Bullet;
+    [SerializeField] Transform Shotpostion;
     [SerializeField] int HP;
+    [SerializeField] float shootrate;
+    bool Isshooting;
     Color colorOrig;
     public NavMeshAgent Agent;
     public Transform playerChara;
     [SerializeField] Transform Anchor;  
     public LayerMask Ground, WherePlayer;
-
-    [Header("Bullet")]
-    [SerializeField] GameObject Bullet;
-    [SerializeField] Transform Shotpostion;
-    [SerializeField] float shootrate;
-    [SerializeField] float shootForce;
-    [SerializeField] float shootUpForce;
-    bool Isshooting;
-
-    [Header("Patrol")]
+    //Patroling
     public Vector3 WalkingPoint;
     bool IsWalk;
     public float timebetween;
     [SerializeField] float Walkpointrange;
 
-    [Header("Range")]
+    //States
     [SerializeField] float SightRange;
     [SerializeField] float Shootrange;
-   
+    bool IsinSight; 
+    // range
     public float Xrange;
     public float Yrange;
     public float Zrange;
-    bool IsinSight;
-
     void Awake()
     {
         colorOrig = Model.material.color;
@@ -63,7 +56,7 @@ public class TeleportShooter : MonoBehaviour, iDamage
         if (IsinSight && Isshooting)
         {
          
-           Shooting();
+            StartCoroutine(Shooting());
   
 
         }
@@ -103,50 +96,16 @@ public class TeleportShooter : MonoBehaviour, iDamage
         Agent.SetDestination(playerChara.position);
 
     }
-    private void Shooting()
+    IEnumerator Shooting()
     {
-        // Check for a clear line of sight before shooting
-        RaycastHit hit;
-        Vector3 directionToPlayer = playerChara.position - transform.position;
-        // Perform the raycast to check for obstacles between enemy and player
-        if (Physics.Raycast(transform.position, directionToPlayer, out hit, Shootrange))
-        {
-            // Check if the raycast hit the player
-            if (hit.transform.CompareTag("Player"))
-            {
-                // Make the enemy face the player
-                Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f); // Smooth rotation
+        //enemy does not move
+        Agent.SetDestination(transform.position);
+        transform.LookAt(playerChara); 
+        Isshooting = true;
+        Instantiate(Bullet, Shotpostion.position, transform.rotation);
+        yield return new WaitForSeconds(shootrate);
+        Isshooting = false;
 
-                Agent.SetDestination(playerChara.position);
-                if (!Isshooting)
-                {
-                    // Calculate the direction towards the player
-                    Vector3 shootDirection = (playerChara.position - Shotpostion.position).normalized;
-
-                    // Instantiate the bullet
-                    GameObject bulletInstance = Instantiate(Bullet, Shotpostion.position, Quaternion.identity);
-                    Rigidbody body = bulletInstance.GetComponent<Rigidbody>();
-
-                    Collider enemyCollider = GetComponent<Collider>();
-                    Collider bulletCollider = bulletInstance.GetComponent<Collider>();
-
-                    // Ignore collision between enemy and bullet
-                    Physics.IgnoreCollision(enemyCollider, bulletCollider);
-
-                    //enemy no shoot himself
-                    Physics.IgnoreCollision(enemyCollider, bulletCollider);
-
-                    body.AddForce(shootDirection * shootForce, ForceMode.Impulse);
-                    body.AddForce(transform.up * shootUpForce, ForceMode.Impulse);
-
-
-                    //
-                    Isshooting = true;
-                    Invoke(nameof(ResetShooting), shootrate);
-                }
-            }
-        }
     } 
     void Teleport()
     {
@@ -160,13 +119,12 @@ public class TeleportShooter : MonoBehaviour, iDamage
     IEnumerator flashColor()
     {
         Model.material.color = Color.red;
-        yield return new WaitForSeconds(.15f);
+        yield return new WaitForSeconds(1f);
         Model.material.color = colorOrig;
     }
-    public void takeDamage(int amount)
+    public void takeDamge(int amount)
     {
         HP -= amount;
-        StartCoroutine(flashColor());
         flashColor();
         Teleport();
         if (HP <= 0)

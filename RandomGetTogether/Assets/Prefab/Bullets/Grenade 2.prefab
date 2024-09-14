@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7035490426850900352}
   - component: {fileID: 137429566915258272}
   m_Layer: 11
-  m_Name: EnemyShooterBullet
+  m_Name: Grenade 2
   m_TagString: Bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -158,8 +158,8 @@ MonoBehaviour:
   explosionRange: 10
   explosionForce: 0
   bulletDamage: 2
-  maxCollision: 1
-  maxLifetime: 2
+  maxCollision: 10
+  maxLifetime: 4
   explodeOnTouch: 0
 --- !u!96 &137429566915258272
 TrailRenderer:
