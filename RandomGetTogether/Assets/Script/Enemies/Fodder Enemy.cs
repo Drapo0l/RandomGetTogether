@@ -14,7 +14,7 @@ public class FodderEnemy : MonoBehaviour, DamageFE
     //Patroling
     public Vector3 WalkPoint;
     bool IsWalking;
-    [SerializeField] float walkpointRange;
+    [SerializeField] float walkpointRange;  
     Color colorOrig;        
     //States
     [SerializeField] float Sightrange;  
