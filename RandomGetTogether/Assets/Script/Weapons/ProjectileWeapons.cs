@@ -1,4 +1,5 @@
 
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -41,6 +42,7 @@ public class ProjectileWeapons : MonoBehaviour
         //make mag full
         bulletsLeft = magazineSize;
         readyToShoot = true;
+        
     }
 
     private void Update()
@@ -59,9 +61,9 @@ public class ProjectileWeapons : MonoBehaviour
         else shooting = Input.GetKeyDown(KeyCode.Mouse0);
 
         //reloading
-        if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading) Reload();
+        if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading && this.gameObject.activeSelf) Reload();
         //reload automatically when trying to shoot without ammo
-        if (readyToShoot && shooting && !reloading && bulletsLeft <= 0) Reload();
+        if (readyToShoot && shooting && !reloading && bulletsLeft <= 0 && this.gameObject.activeSelf) Reload();
 
         //Shooting
         if(readyToShoot && shooting && !reloading && bulletsLeft > 0)
@@ -82,12 +84,18 @@ public class ProjectileWeapons : MonoBehaviour
         Ray ray = fpsCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
 
+        // Create a LayerMask to ignore the player layer (assuming the player's layer is named "Player")
+        int layerMask = 1 << LayerMask.NameToLayer("Player");
+
+        // Invert the mask to hit everything except the player
+        layerMask = ~layerMask;
+
         //check if ray hits something
         Vector3 targetPoint;
-        if(Physics.Raycast(ray,out hit))
+        if(Physics.Raycast(ray,out hit, layerMask))
             targetPoint = hit.point;
         else
-            targetPoint = ray.GetPoint(75); // point far away from player
+        targetPoint = ray.GetPoint(75); // point far away from player
 
         //Calculate direction from attackingPoint to target
         Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
@@ -100,30 +108,32 @@ public class ProjectileWeapons : MonoBehaviour
         Vector3 directionWithSpread = fpsCam.transform.forward + new Vector3(x, y, 0); //Just add spread to last direction
 
         // Normalize the direction with spread
-        directionWithSpread = directionWithSpread.normalized;
+        Vector3 finalDirection = directionWithSpread.normalized;
 
         //Instantiate bullet/projectile
         GameObject currentBullet = Instantiate(bullet, attackPoint.position, Quaternion.identity);
 
-        //Roatate bullet to shoot direction
-        currentBullet.transform.forward = directionWithSpread.normalized;
+        // Normalize the direction after applying spread
+        directionWithSpread = directionWithSpread.normalized;
+
+        // Rotate bullet to shoot direction
+        currentBullet.transform.forward = finalDirection;
 
         // Get the bullet's collider
         Collider bulletCollider = currentBullet.GetComponent<Collider>();
-
         if (playerCollider != null && bulletCollider != null)
         {
+            // Ignore collision with player
             Physics.IgnoreCollision(playerCollider, bulletCollider);
         }
 
         //Add forces to bullet
-        currentBullet.GetComponent<Rigidbody>().AddForce(directionWithSpread.normalized * shootForce, ForceMode.Impulse);
+        currentBullet.GetComponent<Rigidbody>().AddForce(finalDirection * shootForce, ForceMode.Impulse);
         currentBullet.GetComponent<Rigidbody>().AddForce(fpsCam.transform.up * upwardForce, ForceMode.Impulse);
-      
+
 
         //Instantiate muzzle flash
-        if (muzzleFlash != null)
-            Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+        if (muzzleFlash != null) StartCoroutine(FlashMuzzle());      
 
         bulletsLeft--;
         bulletsShot++;
@@ -143,12 +153,29 @@ public class ProjectileWeapons : MonoBehaviour
             Invoke("Shoot", timeBetweenShots);
     }
 
+    IEnumerator FlashMuzzle()
+    {
+        // Instantiate the muzzle flash and store the reference to the instantiated object
+        GameObject flashInstance = Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+
+        // Set the muzzle flash as a child of the attack point so it follows the gun's position
+        flashInstance.transform.SetParent(attackPoint);
+
+        // Wait for a brief moment to display the flash (you can adjust the time here)
+        yield return new WaitForSeconds(.2f);
+
+        // Destroy the instantiated flash instance after the delay    
+        Destroy(flashInstance);
+    }
     private void ResetShot()
     {
         //Allow shooting and invoke again
         readyToShoot = true;
         allowInvoke = true;
     }
+
+    private void OnDisable() => reloading = false;
+    
 
     private void Reload()
     {

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5822636363071071773}
   - component: {fileID: 3595390510282207818}
   - component: {fileID: 1406994088589907592}
-  m_Layer: 11
+  m_Layer: 12
   m_Name: Bullet
   m_TagString: Bullet
   m_Icon: {fileID: 0}
@@ -160,7 +160,7 @@ MonoBehaviour:
   bulletDamage: 4
   maxCollision: 1
   maxLifetime: 4
-  explodeOnTouch: 1
+  explodeOnTouch: 0
 --- !u!96 &1406994088589907592
 TrailRenderer:
   serializedVersion: 3
