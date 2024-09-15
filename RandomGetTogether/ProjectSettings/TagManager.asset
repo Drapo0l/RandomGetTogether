@@ -8,6 +8,7 @@ TagManager:
   - Bullet
   - Enemy
   - SpawnPoint
+  - SpikeBall
   layers:
   - Default
   - TransparentFX
@@ -20,7 +21,7 @@ TagManager:
   - Telport Shooter
   - SpawnPoint
   - WhatIsGround
-  - 
+  - SpikeBall Boss
   - cosmetic
   - 
   - 

@@ -25,11 +25,10 @@ public class FodderEnemy : MonoBehaviour, DamageFE
     {
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
-        colorOrig = Model.material.color;
-        //agent.SetDestination(GameManager.Instance.Player.transform.position);      
+        colorOrig = Model.material.color; 
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         isinSight = Physics.CheckSphere(transform.position, Sightrange,WherePlayer);
@@ -108,16 +107,4 @@ public class FodderEnemy : MonoBehaviour, DamageFE
         Model.material.color = colorOrig;
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.gameObject.tag == "Player")
-    //    {
-           
-    //    }
-    //}
-
-    //void resetInvincibility()
-    //{
-    //    Isbump = false;
-    //}
 }
