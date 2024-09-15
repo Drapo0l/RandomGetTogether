@@ -9,6 +9,7 @@ TagManager:
   - Enemy
   - SpawnPoint
   - Weapon
+  - SpikeBall
   layers:
   - Default
   - TransparentFX
@@ -23,8 +24,8 @@ TagManager:
   - WhatIsGround
   - 
   - cosmetic
-  - 
-  - 
+  - Weapons
+  - EquippedWeapon
   - 
   - 
   - 
