@@ -8,6 +8,7 @@ TagManager:
   - Bullet
   - Enemy
   - SpawnPoint
+  - Weapon
   layers:
   - Default
   - TransparentFX
@@ -21,9 +22,9 @@ TagManager:
   - SpawnPoint
   - WhatIsGround
   - 
-  - cosmetic
-  - 
-  - 
+  - Bullet
+  - Weapons
+  - EquippedWeapon
   - 
   - 
   - 
