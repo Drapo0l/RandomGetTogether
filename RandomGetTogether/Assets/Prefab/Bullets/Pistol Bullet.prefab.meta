@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:RandomGetTogether/Assets/Prefab/Bullets/Pistol Bullet.prefab.meta
 guid: 8691fcfeb8713e44d91cf54fa17e3dda
+========
+guid: f12fa3316abac6f4b9741851b1f8f176
+>>>>>>>> ee7f4f1eabb83922602e06f6b27728b2c191c88f:RandomGetTogether/Assets/Prefab/Capsules 1/Shooter.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 

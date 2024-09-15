@@ -100,12 +100,12 @@ public class ProjectileWeapons : MonoBehaviour
         //Calculate direction from attackingPoint to target
         Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
 
-        // Apply spread (if applicable)
+        //Calc spread
         float x = Random.Range(-spread, spread);
         float y = Random.Range(-spread, spread);
 
-        // Add spread to the calculated directionWithoutSpread
-        Vector3 directionWithSpread = directionWithoutSpread + new Vector3(x, y, 0);
+        //apply spread to player direction
+        Vector3 directionWithSpread = fpsCam.transform.forward + new Vector3(x, y, 0); //Just add spread to last direction
 
         // Normalize the direction with spread
         Vector3 finalDirection = directionWithSpread.normalized;
@@ -116,13 +116,14 @@ public class ProjectileWeapons : MonoBehaviour
         // Normalize the direction after applying spread
         directionWithSpread = directionWithSpread.normalized;
 
-        //Roatate bullet to shoot direction
-        currentBullet.transform.forward = directionWithSpread;
+        // Rotate bullet to shoot direction
+        currentBullet.transform.forward = finalDirection;
 
         // Get the bullet's collider
         Collider bulletCollider = currentBullet.GetComponent<Collider>();
         if (playerCollider != null && bulletCollider != null)
         {
+            // Ignore collision with player
             Physics.IgnoreCollision(playerCollider, bulletCollider);
         }
 
@@ -144,7 +145,7 @@ public class ProjectileWeapons : MonoBehaviour
             allowInvoke = false;
 
             //add recoil to player
-            playerRb.AddForce(-finalDirection.normalized * RecoilForce, ForceMode.Impulse);
+            playerRb.AddForce(-directionWithSpread.normalized * RecoilForce, ForceMode.Impulse);
         }
 
         //if more than one bulletPerTap make sure to repeat shoot func

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour, iDamage
+public class PlayerMovement : MonoBehaviour
 {
     public float health;
     public float maxHealth;
@@ -351,12 +351,12 @@ public class PlayerMovement : MonoBehaviour, iDamage
         return Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
     }
 
-    public void takeDamage(int amount)
+    public void takeDamge(int amount)
     {
         health -= amount;
         if (health <= 0)
         {
-            //Destroy(gameObject);
+            Destroy(gameObject);
         }
 
     }
