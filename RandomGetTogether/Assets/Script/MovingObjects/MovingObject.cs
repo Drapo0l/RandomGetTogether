@@ -12,7 +12,7 @@ public class MovingObject : MonoBehaviour
     float elapsedTime;
     int targetWaypointIndex;
 
-    Transform targetWaypoint;
+    Transform targetWaypoint; 
     Transform previousWayPoint;
 
 
