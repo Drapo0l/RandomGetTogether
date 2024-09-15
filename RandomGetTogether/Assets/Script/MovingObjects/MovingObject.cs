@@ -5,14 +5,14 @@ using UnityEngine;
 public class MovingObject : MonoBehaviour
 {
     [SerializeField] MovingPatht movingPatht;
-    [SerializeField] float speed;
+    [SerializeField] float speed;  
     [SerializeField] bool SlowDownOnNextPoint;
 
     float timeToWaypoint;
     float elapsedTime;
     int targetWaypointIndex;
 
-    Transform targetWaypoint;
+    Transform targetWaypoint; 
     Transform previousWayPoint;
 
 
