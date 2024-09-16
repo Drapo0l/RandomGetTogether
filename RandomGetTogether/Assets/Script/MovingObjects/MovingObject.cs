@@ -11,7 +11,7 @@ public class MovingObject : MonoBehaviour
     float timeToWaypoint;
     float elapsedTime;
     int targetWaypointIndex;
-
+     
     Transform targetWaypoint; 
     Transform previousWayPoint;
      
