@@ -14,7 +14,7 @@ public class MovingObject : MonoBehaviour
 
     Transform targetWaypoint; 
     Transform previousWayPoint;
-
+     
 
     // Start is called before the first frame update
     void Start()
