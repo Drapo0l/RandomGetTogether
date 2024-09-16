@@ -1185,6 +1185,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1315334003824683146, guid: 718402d87ed84f6418c3caff86983441, type: 3}
+      propertyPath: attractionStrength
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1315334003824683146, guid: 718402d87ed84f6418c3caff86983441, type: 3}
       propertyPath: objectOfAttraction
       value: 
       objectReference: {fileID: 414228879}
@@ -1232,9 +1236,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3815867844452008496, guid: 718402d87ed84f6418c3caff86983441, type: 3}
+      propertyPath: attractionStrength
+      value: 35
+      objectReference: {fileID: 0}
     - target: {fileID: 3901648398205578088, guid: 718402d87ed84f6418c3caff86983441, type: 3}
       propertyPath: m_Name
       value: ' SpikeBall Boss'
+      objectReference: {fileID: 0}
+    - target: {fileID: 4959120854411069759, guid: 718402d87ed84f6418c3caff86983441, type: 3}
+      propertyPath: attractionStrength
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 5817596978254423228, guid: 718402d87ed84f6418c3caff86983441, type: 3}
+      propertyPath: attractionStrength
+      value: 35
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
