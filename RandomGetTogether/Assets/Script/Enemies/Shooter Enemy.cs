@@ -76,7 +76,7 @@ public class ShooterEnemy : MonoBehaviour, iDamage
         if (Physics.Raycast(transform.position, directionToPlayer, out hit, Shootrange))
         {
             // Check if the raycast hit the player
-            if (hit.transform.CompareTag("Player"))
+            if (hit.transform.CompareTag("Player") || hit.transform.parent.CompareTag("Player"))
             {
                 // Make the enemy face the player
                 Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);

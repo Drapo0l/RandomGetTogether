@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class FodderEnemy : MonoBehaviour, DamageFE
+public class FodderEnemy : MonoBehaviour, iDamage
 {
     public int damage;
     [SerializeField] Renderer Model;
@@ -47,7 +47,7 @@ public class FodderEnemy : MonoBehaviour, DamageFE
     {
         if(player.gameObject.CompareTag("Player"))
         {
-            player.gameObject.GetComponent<PlayerMovement>().takeDamge(damage);
+            player.gameObject.GetComponent<PlayerMovement>().takeDamage(damage);
             if (player.gameObject.GetComponent<PlayerMovement>().health <= 0)
             {
 
@@ -55,10 +55,10 @@ public class FodderEnemy : MonoBehaviour, DamageFE
         }
     }
 
-    public void takeDamge(int amount)
+    public void takeDamage(int amount)
     {
         HP -= amount;
-        flashColor();
+        StartCoroutine(flashColor());
         if (HP <= 0)
         {
             Destroy(gameObject);
@@ -103,7 +103,7 @@ public class FodderEnemy : MonoBehaviour, DamageFE
     IEnumerator flashColor()
     {
         Model.material.color = Color.red;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(.2f);
         Model.material.color = colorOrig;
     }
 

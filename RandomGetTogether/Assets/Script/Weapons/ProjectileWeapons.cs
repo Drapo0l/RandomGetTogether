@@ -10,7 +10,7 @@ public class ProjectileWeapons : MonoBehaviour
     public GameObject bullet;
 
     //bullet force
-    public float shootForce, upwardForce;
+    public float shootForce, upwardForce, maxDistance;
 
     //Gun stats
     public float timeBetweenShooting, spread, reloadTime, timeBetweenShots;
@@ -33,6 +33,8 @@ public class ProjectileWeapons : MonoBehaviour
     //Graphics
     public GameObject muzzleFlash;
     public TextMeshProUGUI ammunitionDisplay;
+
+
 
     //bug fixing :D
     public bool allowInvoke = true;
@@ -85,18 +87,20 @@ public class ProjectileWeapons : MonoBehaviour
         RaycastHit hit;
 
         // Create a LayerMask to ignore the player layer (assuming the player's layer is named "Player")
-        int layerMask = 1 << LayerMask.NameToLayer("Player");
-
-        // Invert the mask to hit everything except the player
-        layerMask = ~layerMask;
+        int playerLayer = LayerMask.NameToLayer("Player");
+        int gunLayer = LayerMask.NameToLayer("EquippedWeapon"); // Add this if your gun has a specific layer
+        int layerMask = ~(1 << playerLayer | 1 << gunLayer); // Ignore both player and gun layers
 
         //check if ray hits something
         Vector3 targetPoint;
-        if(Physics.Raycast(ray,out hit, layerMask))
-            targetPoint = hit.point;
+        if (Physics.Raycast(ray, out hit, maxDistance, layerMask))
+        {
+            targetPoint = hit.point; // Exact hit position
+        }
         else
-        targetPoint = ray.GetPoint(75); // point far away from player
-
+        {
+            targetPoint = ray.GetPoint(maxDistance); // Default to max distance if no hit     
+        }
         //Calculate direction from attackingPoint to target
         Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
 
@@ -105,7 +109,7 @@ public class ProjectileWeapons : MonoBehaviour
         float y = Random.Range(-spread, spread);
 
         //apply spread to player direction
-        Vector3 directionWithSpread = fpsCam.transform.forward + new Vector3(x, y, 0); //Just add spread to last direction
+        Vector3 directionWithSpread = directionWithoutSpread + new Vector3(x, y, 0);
 
         // Normalize the direction with spread
         Vector3 finalDirection = directionWithSpread.normalized;

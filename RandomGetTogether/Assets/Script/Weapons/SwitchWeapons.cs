@@ -26,10 +26,14 @@ public class SwitchWeapons : MonoBehaviour
     [Header("Layer Masks")]
     public LayerMask ignoreLayerMask; // Assign this in the inspector to ignore equipped weapons layer
 
+    private Collider playerCollider;
+
     private void Start()
     {
-        // Get the player's collider for future reference       
+        // Get the player's capsule collider (assumed to be a child of the player)
+        playerCollider = player.GetComponentInChildren<Collider>();
 
+        // Get the player's collider for future reference
         SelectWeapon(selectedWeapon);
         timeSinceLastSwitch = 0f;
     }
@@ -71,6 +75,13 @@ public class SwitchWeapons : MonoBehaviour
             if (weapons[i] != null)
             {
                 weapons[i].gameObject.SetActive(i == weaponIndex);
+
+                // Ignore collision with the player collider if the weapon is equipped
+                Collider weaponCollider = weapons[i].GetComponent<Collider>();
+                if (weaponCollider != null)
+                {
+                    Physics.IgnoreCollision(playerCollider, weaponCollider, true);
+                }
             }
         }
 
@@ -161,7 +172,7 @@ public class SwitchWeapons : MonoBehaviour
 
         if (weapons.Count < 3)
             weapons.Add(weapon);  // Add to list of weapons
-        selectedWeapon = weapons.Count - 1;  // Equip the newly picked-up weapon
+        //selectedWeapon = weapons.Count - 1;  // Equip the newly picked-up weapon
 
         Debug.Log("Picked up weapon: " + weapon.name);
     }
@@ -205,8 +216,11 @@ public class SwitchWeapons : MonoBehaviour
         {
             coll.isTrigger = false;
 
-            //// Re-enable collision between player's collider and weapon's collider
-            //Physics.IgnoreCollision(playerCollider, coll, false);
+            // Turn off collision between player's collider and weapon's collider
+            if (playerCollider != null)
+            {
+                Physics.IgnoreCollision(playerCollider, coll, true);
+            }
         }
 
         // Instead of removing the weapon, set the slot to null

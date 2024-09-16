@@ -19,7 +19,7 @@ public class CustomBullet : MonoBehaviour
     public int explosionDamage;
     public float explosionRange;
     public float explosionForce;
-    public float bulletDamage;
+    public int bulletDamage;
 
     //lifetime
     public int maxCollision;
@@ -63,33 +63,11 @@ public class CustomBullet : MonoBehaviour
         Invoke("Delay", 0.05f);
     }
 
-    private IEnumerator NormalShot(GameObject target)
+    private void NormalShot(GameObject target)
     {
-        if (target.tag == "Player")
-        {        
-            
-            
-            PlayerMovement player = target.GetComponent<PlayerMovement>();
-            GameManager.Instance.dmgflash();
-            player.health -= bulletDamage;
-            if (player.health <= 0)
-            {
-                Destroy(target);
-            }           
-            
-        }
-        else if (target.tag == "Enemy")
-        {
-            target.GetComponent<EnemyHealth>().health -= bulletDamage;
-            target.GetComponent<Renderer>().material.color = Color.red;
-            yield return new WaitForSeconds(.1f);
-            target.GetComponent<Renderer>().material.color = Color.white;
-
-            if (target.GetComponent<EnemyHealth>().health <= 0)
-            {
-                Destroy(target);               
-            }
-        }
+        iDamage enemy = target.GetComponent<iDamage>();
+        if (enemy != null) enemy = target.GetComponentInParent<iDamage>();
+        if (enemy != null) enemy.takeDamage(bulletDamage);
         Destroy(gameObject);
         // add a little delay to make sure things work
         Invoke("Delay", 0.05f);
@@ -103,10 +81,8 @@ public class CustomBullet : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //explode if bullet hit an enemy directly and explodeOnTouch is true
-        if (collision.collider.CompareTag("Enemy") && explodeOnTouch) Explode();
-        else if (collision.collider.CompareTag("Enemy") && !explodeOnTouch) StartCoroutine(NormalShot(collision.gameObject));
-        else if (collision.collider.CompareTag("Player") && explodeOnTouch) Explode();
-        else if (collision.collider.tag == "Player" && !explodeOnTouch) StartCoroutine(NormalShot(collision.gameObject));
+        if (explodeOnTouch) Explode();
+        else NormalShot(collision.gameObject);
         
 
         //don't count collisions with other bullets

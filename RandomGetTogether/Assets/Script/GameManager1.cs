@@ -38,6 +38,16 @@ public class GameManager : MonoBehaviour
         PlayerScript = Player.GetComponent<PlayerMovement>(); 
     }
 
+    public void UpdateHealthBar()
+    {
+        if (PlayerScript != null)
+        {
+            // Assuming PlayerScript has a 'health' and 'maxHealth' variable
+            float healthPercentage = PlayerScript.health / PlayerScript.maxHealth;
+            Player_HP_Bar.fillAmount = healthPercentage; // Updates the health bar fill amount
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -54,6 +64,7 @@ public class GameManager : MonoBehaviour
                 unpausedState();
             }
         }
+        UpdateHealthBar();
     }
 
     public void pausedState() 
