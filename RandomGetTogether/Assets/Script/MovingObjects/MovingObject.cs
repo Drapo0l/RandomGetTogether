@@ -11,10 +11,10 @@ public class MovingObject : MonoBehaviour
     float timeToWaypoint;
     float elapsedTime;
     int targetWaypointIndex;
-
+     
     Transform targetWaypoint; 
-    Transform previousWayPoint;
-
+    Transform previousWayPoint; 
+     
 
     // Start is called before the first frame update
     void Start()
