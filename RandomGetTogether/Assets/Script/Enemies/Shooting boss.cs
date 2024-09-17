@@ -16,7 +16,7 @@ public class Shootingboss : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float distance = Vector3.Distance(transform.position, player.transform.position);
+        float distance = Vector3.Distance(transform.position, player.transform.position);  
         Debug.Log("Distance: " + distance);
         if (distance < EnemyDistance) { 
           Vector3 DistancePlayer =transform.position - player.transform.position;

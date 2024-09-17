@@ -37,6 +37,7 @@ public class TeleportShooter : MonoBehaviour, iDamage
     public float Yrange;
     public float Zrange;
     bool IsinSight;
+    bool isinRange;
 
     void Awake()
     {
@@ -50,17 +51,17 @@ public class TeleportShooter : MonoBehaviour, iDamage
     void Update()
     {
         IsinSight = Physics.CheckSphere(transform.position, SightRange, WherePlayer);
-        Isshooting = Physics.CheckSphere(transform.position, Shootrange, WherePlayer);
-        if (!IsinSight && !Isshooting)
+        isinRange = Physics.CheckSphere(transform.position, Shootrange, WherePlayer);
+        if (!IsinSight)
         {
             Patroling();
 
         }
-        if (IsinSight && !Isshooting)
+        if (IsinSight && !isinRange)
         {
             CHASE();
         }
-        if (IsinSight && Isshooting)
+        if (IsinSight && isinRange)
         {
 
             Shooting();
@@ -112,7 +113,7 @@ public class TeleportShooter : MonoBehaviour, iDamage
         if (Physics.Raycast(transform.position, directionToPlayer, out hit, Shootrange))
         {
             // Check if the raycast hit the player
-            if (hit.transform.CompareTag("Player"))
+            if (hit.transform.CompareTag("Player") || hit.transform.parent.CompareTag("Player"))
             {
                 // Make the enemy face the player
                 Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
@@ -135,7 +136,7 @@ public class TeleportShooter : MonoBehaviour, iDamage
                     Physics.IgnoreCollision(enemyCollider, bulletCollider);
 
                     //enemy no shoot himself
-                    Physics.IgnoreCollision(enemyCollider, bulletCollider);
+                   Physics.IgnoreCollision(enemyCollider, bulletCollider);
 
                     body.AddForce(shootDirection * shootForce, ForceMode.Impulse);
                     body.AddForce(transform.up * shootUpForce, ForceMode.Impulse);

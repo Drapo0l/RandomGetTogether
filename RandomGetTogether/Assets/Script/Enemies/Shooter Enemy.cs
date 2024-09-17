@@ -59,7 +59,7 @@ public class ShooterEnemy : MonoBehaviour, iDamage
             Chasing();
         }
         if (isinSight && isinRange)
-        {
+        { 
             Shooting();
 
         }
