@@ -225,11 +225,10 @@ GameObject:
   - component: {fileID: 6224219286406362859}
   - component: {fileID: 833571740537103749}
   - component: {fileID: 3550882341364115904}
-  - component: {fileID: -4710393242616202077}
   - component: {fileID: 1454349884961506318}
   m_Layer: 9
   m_Name: Shooter
-  m_TagString: Enemy
+  m_TagString: Shooter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -336,39 +335,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09cdbbae0efe547499d795682f016993, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Model: {fileID: 6224219286406362859}
   Agent: {fileID: 1454349884961506318}
-  Shotpostion: {fileID: 8471472099613198865}
   HP: 8
-  Player: {fileID: 5567424106203493310, guid: ea3764dd93f3a244285cc6c359f41023, type: 3}
-  Bullet: {fileID: 3330798446351583970, guid: 7998bd2345b57e14a85c979e115b14f8, type: 3}
-  shootrate: 0.5
+  Model: {fileID: 6224219286406362859}
+  Player: {fileID: 8259274888537170069, guid: c2882d57af8c8aa4595152ca77988679, type: 3}
   Ground:
     serializedVersion: 2
     m_Bits: 1024
   WherePlayer:
     serializedVersion: 2
     m_Bits: 8
+  Shotpostion: {fileID: 8471472099613198865}
+  Bullet: {fileID: 3330798446351583970, guid: 825d451e7a37524499d76caed984e74b, type: 3}
+  shootrate: 0.5
+  shootForce: 70
+  shootUpForce: 0
   WalkPoint: {x: 0, y: 0, z: 0}
   walkpointRange: 50
   Sightrange: 25
-  Shootrange: 0
---- !u!114 &-4710393242616202077
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8030252478152053632}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 48e067fbb5207774ba4a95623b6543db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 15
-  maxHealth: 15
-  Model: {fileID: 6224219286406362859}
-  colorOrig: {r: 0, g: 0, b: 0, a: 0}
+  Shootrange: 10
 --- !u!195 &1454349884961506318
 NavMeshAgent:
   m_ObjectHideFlags: 0

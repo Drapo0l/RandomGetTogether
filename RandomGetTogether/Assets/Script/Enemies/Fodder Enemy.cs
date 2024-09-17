@@ -14,7 +14,7 @@ public class FodderEnemy : MonoBehaviour, iDamage
     //Patroling
     public Vector3 WalkPoint;
     bool IsWalking;
-    [SerializeField] float walkpointRange;
+    [SerializeField] float walkpointRange;  
     Color colorOrig;        
     //States
     [SerializeField] float Sightrange;  
@@ -25,11 +25,10 @@ public class FodderEnemy : MonoBehaviour, iDamage
     {
         player = GameObject.Find("Player").transform;
         agent = GetComponent<NavMeshAgent>();
-        colorOrig = Model.material.color;
-        //agent.SetDestination(GameManager.Instance.Player.transform.position);      
+        colorOrig = Model.material.color; 
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         isinSight = Physics.CheckSphere(transform.position, Sightrange,WherePlayer);
@@ -45,12 +44,26 @@ public class FodderEnemy : MonoBehaviour, iDamage
     }
 
     private void OnCollisionEnter(Collision player)
-    {   
-        iDamage dmg = player.collider.GetComponentInParent<iDamage>();
-        if (dmg != null)
+    {
+        if(player.gameObject.CompareTag("Player"))
         {
-            dmg.takeDamage(damage);
+            player.gameObject.GetComponent<PlayerMovement>().takeDamage(damage);
+            if (player.gameObject.GetComponent<PlayerMovement>().health <= 0)
+            {
+
+            }
         }
+    }
+
+    public void takeDamage(int amount)
+    {
+        HP -= amount;
+        StartCoroutine(flashColor());
+        if (HP <= 0)
+        {
+            Destroy(gameObject);
+        }
+
     }
     public void Patroling()
     { 
@@ -90,31 +103,8 @@ public class FodderEnemy : MonoBehaviour, iDamage
     IEnumerator flashColor()
     {
         Model.material.color = Color.red;
-        yield return new WaitForSeconds(.15f);
+        yield return new WaitForSeconds(.2f);
         Model.material.color = colorOrig;
     }
 
-    public void takeDamage(int amount)
-    {
-        HP -= amount;
-        StartCoroutine(flashColor());
-        if (HP <= 0)
-        {
-            Destroy(gameObject);
-        }
-
-    }
-
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    if (other.gameObject.tag == "Player")
-    //    {
-
-    //    }
-    //}
-
-    //void resetInvincibility()
-    //{
-    //    Isbump = false;
-    //}
 }

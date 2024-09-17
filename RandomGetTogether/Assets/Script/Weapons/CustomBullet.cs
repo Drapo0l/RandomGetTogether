@@ -61,31 +61,28 @@ public class CustomBullet : MonoBehaviour
         }
         // add a little delay to make sure things work
         Invoke("Delay", 0.05f);
-    }    
+    }
+
+    private void NormalShot(GameObject target)
+    {
+        iDamage enemy = target.GetComponent<iDamage>();
+        if (enemy != null) enemy = target.GetComponentInParent<iDamage>();
+        if (enemy != null) enemy.takeDamage(bulletDamage);
+        Destroy(gameObject);
+        // add a little delay to make sure things work
+        Invoke("Delay", 0.05f);
+    }
 
     private void Delay()
     {
         Destroy(gameObject);
     }
 
-    private void NormalShot(Collision target)
-    {
-        iDamage dmg = target.collider.GetComponent<iDamage>();
-        if (dmg == null) dmg = target.collider.GetComponentInParent<iDamage>();
-        if (dmg != null) 
-        {
-            dmg.takeDamage(bulletDamage);
-            Destroy(gameObject);
-        }
-        
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         //explode if bullet hit an enemy directly and explodeOnTouch is true
         if (explodeOnTouch) Explode();
-        else NormalShot(collision);
-        
+        else NormalShot(collision.gameObject);
         
 
         //don't count collisions with other bullets

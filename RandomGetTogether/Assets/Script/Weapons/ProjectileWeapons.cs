@@ -1,4 +1,5 @@
 
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -9,7 +10,7 @@ public class ProjectileWeapons : MonoBehaviour
     public GameObject bullet;
 
     //bullet force
-    public float shootForce, upwardForce;
+    public float shootForce, upwardForce, maxDistance;
 
     //Gun stats
     public float timeBetweenShooting, spread, reloadTime, timeBetweenShots;
@@ -33,6 +34,8 @@ public class ProjectileWeapons : MonoBehaviour
     public GameObject muzzleFlash;
     public TextMeshProUGUI ammunitionDisplay;
 
+
+
     //bug fixing :D
     public bool allowInvoke = true;
 
@@ -41,6 +44,7 @@ public class ProjectileWeapons : MonoBehaviour
         //make mag full
         bulletsLeft = magazineSize;
         readyToShoot = true;
+        
     }
 
     private void Update()
@@ -59,9 +63,9 @@ public class ProjectileWeapons : MonoBehaviour
         else shooting = Input.GetKeyDown(KeyCode.Mouse0);
 
         //reloading
-        if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading) Reload();
+        if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading && this.gameObject.activeSelf) Reload();
         //reload automatically when trying to shoot without ammo
-        if (readyToShoot && shooting && !reloading && bulletsLeft <= 0) Reload();
+        if (readyToShoot && shooting && !reloading && bulletsLeft <= 0 && this.gameObject.activeSelf) Reload();
 
         //Shooting
         if(readyToShoot && shooting && !reloading && bulletsLeft > 0)
@@ -82,60 +86,58 @@ public class ProjectileWeapons : MonoBehaviour
         Ray ray = fpsCam.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0));
         RaycastHit hit;
 
+        // Create a LayerMask to ignore the player layer (assuming the player's layer is named "Player")
+        int playerLayer = LayerMask.NameToLayer("Player");
+        int gunLayer = LayerMask.NameToLayer("EquippedWeapon"); // Add this if your gun has a specific layer
+        int layerMask = ~(1 << playerLayer | 1 << gunLayer); // Ignore both player and gun layers
+
         //check if ray hits something
         Vector3 targetPoint;
-        if(Physics.Raycast(ray,out hit))
-            targetPoint = hit.point;
+        if (Physics.Raycast(ray, out hit, maxDistance, layerMask))
+        {
+            targetPoint = hit.point; // Exact hit position
+        }
         else
-            targetPoint = ray.GetPoint(75); // point far away from player
-
+        {
+            targetPoint = ray.GetPoint(maxDistance); // Default to max distance if no hit     
+        }
         //Calculate direction from attackingPoint to target
         Vector3 directionWithoutSpread = targetPoint - attackPoint.position;
 
-        // Declare finalDirection outside the if statement
-        Vector3 finalDirection;
+        //Calc spread
+        float x = Random.Range(-spread, spread);
+        float y = Random.Range(-spread, spread);
 
-        if (spread > 0)
-        {
-            //Calc spread
-            float x = Random.Range(-spread, spread);
-            float y = Random.Range(-spread, spread);
+        //apply spread to player direction
+        Vector3 directionWithSpread = directionWithoutSpread + new Vector3(x, y, 0);
 
-            //apply spread to player direction
-            Vector3 directionWithSpread = fpsCam.transform.forward + new Vector3(x, y, 0); //Just add spread to last direction
-
-            // Normalize the direction with spread
-            finalDirection = directionWithSpread.normalized;
-
-        }
-        else
-        {
-            // If spread is 0, use the exact direction without modifying it
-            finalDirection = directionWithoutSpread.normalized;
-        }
+        // Normalize the direction with spread
+        Vector3 finalDirection = directionWithSpread.normalized;
 
         //Instantiate bullet/projectile
         GameObject currentBullet = Instantiate(bullet, attackPoint.position, Quaternion.identity);
 
-        //Roatate bullet to shoot direction
-        currentBullet.transform.forward = finalDirection.normalized;
+        // Normalize the direction after applying spread
+        directionWithSpread = directionWithSpread.normalized;
+
+        // Rotate bullet to shoot direction
+        currentBullet.transform.forward = finalDirection;
 
         // Get the bullet's collider
         Collider bulletCollider = currentBullet.GetComponent<Collider>();
-
         if (playerCollider != null && bulletCollider != null)
         {
+            // Ignore collision with player
             Physics.IgnoreCollision(playerCollider, bulletCollider);
         }
 
         //Add forces to bullet
-        currentBullet.GetComponent<Rigidbody>().AddForce(finalDirection.normalized * shootForce, ForceMode.Impulse);
+        currentBullet.GetComponent<Rigidbody>().AddForce(finalDirection * shootForce, ForceMode.Impulse);
         currentBullet.GetComponent<Rigidbody>().AddForce(fpsCam.transform.up * upwardForce, ForceMode.Impulse);
-      
+
 
         //Instantiate muzzle flash
-        if (muzzleFlash != null)
-            Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+        if (muzzleFlash != null) StartCoroutine(FlashMuzzle());      
 
         bulletsLeft--;
         bulletsShot++;
@@ -147,7 +149,7 @@ public class ProjectileWeapons : MonoBehaviour
             allowInvoke = false;
 
             //add recoil to player
-            playerRb.AddForce(-finalDirection.normalized * RecoilForce, ForceMode.Impulse);
+            playerRb.AddForce(-directionWithSpread.normalized * RecoilForce, ForceMode.Impulse);
         }
 
         //if more than one bulletPerTap make sure to repeat shoot func
@@ -155,12 +157,27 @@ public class ProjectileWeapons : MonoBehaviour
             Invoke("Shoot", timeBetweenShots);
     }
 
+    IEnumerator FlashMuzzle()
+    {
+        ////turn off plane with muzzle flash
+        //muzzleFlash.SetActive(true);
+
+        //Wait for a brief moment to display the flash(you can adjust the time here)
+
+       yield return new WaitForSeconds(.1f);
+
+        //turn on plane with muzzle flash
+        muzzleFlash.GetComponent<Mesh>();
+    }
     private void ResetShot()
     {
         //Allow shooting and invoke again
         readyToShoot = true;
         allowInvoke = true;
     }
+
+    private void OnDisable() => reloading = false;
+    
 
     private void Reload()
     {

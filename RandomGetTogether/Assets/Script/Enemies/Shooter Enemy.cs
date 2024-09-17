@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+
+
 public class ShooterEnemy : MonoBehaviour, iDamage
 {
-    [Header("Basics")]    
-    public NavMeshAgent Agent;   
+    [Header("Basics")]
+    public NavMeshAgent Agent;
     [SerializeField] int HP;
     [SerializeField] Renderer Model;
     public Transform Player;
@@ -19,8 +21,8 @@ public class ShooterEnemy : MonoBehaviour, iDamage
     [SerializeField] float shootForce;
     [SerializeField] float shootUpForce;
     Color colorOrig;
-    bool Isshooting; 
-    
+    bool Isshooting;
+
     //Patroling
     [Header("Patroll")]
     public Vector3 WalkPoint;
@@ -58,13 +60,13 @@ public class ShooterEnemy : MonoBehaviour, iDamage
         }
         if (isinSight && isinRange)
         {
-            Shooting();  
+            Shooting();
 
         }
 
     }
 
-   
+
     private void Shooting()
     {
         // Check for a clear line of sight before shooting
@@ -74,7 +76,7 @@ public class ShooterEnemy : MonoBehaviour, iDamage
         if (Physics.Raycast(transform.position, directionToPlayer, out hit, Shootrange))
         {
             // Check if the raycast hit the player
-            if (hit.transform.CompareTag("Player"))
+            if (hit.transform.CompareTag("Player") || hit.transform.parent.CompareTag("Player"))
             {
                 // Make the enemy face the player
                 Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
@@ -118,7 +120,7 @@ public class ShooterEnemy : MonoBehaviour, iDamage
     }
     public void takeDamage(int amount)
     {
-        
+
         HP -= amount;
         StartCoroutine(flashColor());
         flashColor();
@@ -169,5 +171,6 @@ public class ShooterEnemy : MonoBehaviour, iDamage
         Isshooting = false;
     }
 
-   
+
 }
+

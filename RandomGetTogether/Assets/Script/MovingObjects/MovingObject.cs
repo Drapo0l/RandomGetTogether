@@ -5,16 +5,16 @@ using UnityEngine;
 public class MovingObject : MonoBehaviour
 {
     [SerializeField] MovingPatht movingPatht;
-    [SerializeField] float speed;
+    [SerializeField] float speed;  
     [SerializeField] bool SlowDownOnNextPoint;
 
     float timeToWaypoint;
     float elapsedTime;
     int targetWaypointIndex;
-
-    Transform targetWaypoint;
-    Transform previousWayPoint;
-
+     
+    Transform targetWaypoint; 
+    Transform previousWayPoint; 
+     
 
     // Start is called before the first frame update
     void Start()

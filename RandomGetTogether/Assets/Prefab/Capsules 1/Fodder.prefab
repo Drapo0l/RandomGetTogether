@@ -14,10 +14,9 @@ GameObject:
   - component: {fileID: 1339472093651110227}
   - component: {fileID: 1337050080834692854}
   - component: {fileID: 5704743203907476511}
-  - component: {fileID: -7007237150706523513}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Fodder
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -29,13 +28,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2875652854788336954}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 23.54, y: 1.05, z: -17.84}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &6703584170665482798
 MeshFilter:
@@ -122,8 +121,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c6eee8cadbcbbf4298c6255f3bc74ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 5
   Model: {fileID: 6894626977557326634}
-  HP: 0
+  HP: 10
   agent: {fileID: 5704743203907476511}
   player: {fileID: 0}
   Ground:
@@ -131,7 +131,7 @@ MonoBehaviour:
     m_Bits: 1024
   WherePlayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 8
   WalkPoint: {x: 0, y: 0, z: 0}
   walkpointRange: 30
   Sightrange: 15
@@ -145,11 +145,11 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 5
+  m_Speed: 10
   m_Acceleration: 20
   avoidancePriority: 50
   m_AngularSpeed: 600
-  m_StoppingDistance: 4
+  m_StoppingDistance: 1.8
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -157,19 +157,3 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &-7007237150706523513
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2875652854788336954}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4eb31420ec772647ac62d62af19efeb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health: 0
-  maxHealth: 0
-  Model: {fileID: 0}
-  obj: {fileID: 0}

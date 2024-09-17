@@ -12,7 +12,7 @@ public class TeleportShooter : MonoBehaviour, iDamage
     Color colorOrig;
     public NavMeshAgent Agent;
     public Transform playerChara;
-    [SerializeField] Transform Anchor;  
+    [SerializeField] Transform Anchor;
     public LayerMask Ground, WherePlayer;
 
     [Header("Bullet")]
@@ -32,7 +32,7 @@ public class TeleportShooter : MonoBehaviour, iDamage
     [Header("Range")]
     [SerializeField] float SightRange;
     [SerializeField] float Shootrange;
-   
+
     public float Xrange;
     public float Yrange;
     public float Zrange;
@@ -42,15 +42,15 @@ public class TeleportShooter : MonoBehaviour, iDamage
     {
         colorOrig = Model.material.color;
         playerChara = GameObject.Find("Player").transform;
-        Anchor = GameObject.Find("SpawnPoint").transform;     
-        Agent = GetComponent<NavMeshAgent>(); 
+        Anchor = GameObject.Find("SpawnPoint").transform;
+        Agent = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
     void Update()
     {
         IsinSight = Physics.CheckSphere(transform.position, SightRange, WherePlayer);
-        Isshooting = Physics.CheckSphere(transform.position, Shootrange, WherePlayer);    
+        Isshooting = Physics.CheckSphere(transform.position, Shootrange, WherePlayer);
         if (!IsinSight && !Isshooting)
         {
             Patroling();
@@ -58,13 +58,13 @@ public class TeleportShooter : MonoBehaviour, iDamage
         }
         if (IsinSight && !Isshooting)
         {
-            CHASE(); 
+            CHASE();
         }
         if (IsinSight && Isshooting)
         {
-         
-           Shooting();
-  
+
+            Shooting();
+
 
         }
     }
@@ -147,14 +147,14 @@ public class TeleportShooter : MonoBehaviour, iDamage
                 }
             }
         }
-    } 
+    }
     void Teleport()
     {
         float X = Random.Range(-Xrange, Xrange);
         float Y = Random.Range(0, Yrange);
         float Z = Random.Range(-Zrange, Zrange);
         transform.position = new Vector3(X, Y, Z);
-        transform.LookAt(GameManager.Instance.TeleportAnchor.transform); 
+        transform.LookAt(GameManager.Instance.TeleportAnchor.transform);
     }
 
     IEnumerator flashColor()
@@ -180,3 +180,4 @@ public class TeleportShooter : MonoBehaviour, iDamage
         Isshooting = false;
     }
 }
+
