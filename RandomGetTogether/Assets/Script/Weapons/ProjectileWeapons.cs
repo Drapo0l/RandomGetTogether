@@ -159,17 +159,15 @@ public class ProjectileWeapons : MonoBehaviour
 
     IEnumerator FlashMuzzle()
     {
-        // Instantiate the muzzle flash and store the reference to the instantiated object
-        GameObject flashInstance = Instantiate(muzzleFlash, attackPoint.position, Quaternion.identity);
+        ////turn off plane with muzzle flash
+        //muzzleFlash.SetActive(true);
 
-        // Set the muzzle flash as a child of the attack point so it follows the gun's position
-        flashInstance.transform.SetParent(attackPoint);
+        //Wait for a brief moment to display the flash(you can adjust the time here)
 
-        // Wait for a brief moment to display the flash (you can adjust the time here)
-        yield return new WaitForSeconds(.2f);
+       yield return new WaitForSeconds(.1f);
 
-        // Destroy the instantiated flash instance after the delay    
-        Destroy(flashInstance);
+        //turn on plane with muzzle flash
+        muzzleFlash.GetComponent<Mesh>();
     }
     private void ResetShot()
     {

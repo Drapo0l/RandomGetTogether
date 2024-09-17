@@ -43,13 +43,7 @@ public class SwitchWeapons : MonoBehaviour
         int previousSelectedWeapon = selectedWeapon;
 
         // Handle switching weapons with keys
-        for (int i = 0; i < Mathf.Min(keys.Length, weapons.Count); i++)
-        {
-            if (Input.GetKey(keys[i]) && timeSinceLastSwitch >= switchTime)
-            {
-                selectedWeapon = i;
-            }
-        }
+        selectGun();
 
         if (previousSelectedWeapon != selectedWeapon)
         {
@@ -121,11 +115,15 @@ public class SwitchWeapons : MonoBehaviour
         weapon.localPosition = Vector3.zero;
         weapon.localRotation = Quaternion.Euler(Vector3.zero);
 
+
+        int availableIndex;
         // Change layer to equipped weapon
         weapon.gameObject.layer = LayerMask.NameToLayer("EquippedWeapon");
+        if (weapons[selectedWeapon] == null)
+            availableIndex = weapons.FindIndex(w => w == null);// Find the first empty slot (null) in the weapons list
+        else
+            availableIndex = selectedWeapon;
 
-        // Find the first empty slot (null) in the weapons list
-        int availableIndex = weapons.FindIndex(w => w == null);
 
         if (availableIndex != -1)
         {
@@ -234,5 +232,26 @@ public class SwitchWeapons : MonoBehaviour
         }
 
         Debug.Log("Dropped weapon: " + weaponToDrop.name);
+    }
+
+    void selectGun()
+    {
+        if (Input.GetAxis("Mouse ScrollWheel") > 0)
+        {
+            if (selectedWeapon == 2)
+                selectedWeapon = 0;            
+            else
+                selectedWeapon++;
+
+            SelectWeapon(selectedWeapon);
+        }
+        if (Input.GetAxis("Mouse ScrollWheel") < 0)
+        {
+            if (selectedWeapon == 0)
+                selectedWeapon = 2;
+            else
+                selectedWeapon--;
+            SelectWeapon(selectedWeapon);
+        }
     }
 }
