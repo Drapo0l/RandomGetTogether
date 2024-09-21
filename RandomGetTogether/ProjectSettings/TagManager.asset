@@ -10,6 +10,7 @@ TagManager:
   - SpawnPoint
   - Weapon
   - SpikeBall
+  - Teleport Shooter
   layers:
   - Default
   - TransparentFX
