@@ -2,8 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour,iDamage
 {
+    public float health;
+    public float maxHealth;
+
     [Header("Movement")]
     private float moveSpeed;
     public float walkSpeed;
@@ -220,7 +223,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private float speedChangeFactor;
-    internal float health;
+    
 
     private IEnumerator SmoothlyLerpMoveSpeed()
     {
@@ -348,6 +351,16 @@ public class PlayerMovement : MonoBehaviour
         return Vector3.ProjectOnPlane(direction, slopeHit.normal).normalized;
     }
 
+    public void takeDamage(int amount)
+    {
 
+        health -= amount;
+        
+        if (health <= 0)
+        {
+            Destroy(gameObject);
+        }
+
+    }
 
 }
