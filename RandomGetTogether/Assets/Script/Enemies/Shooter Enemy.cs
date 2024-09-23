@@ -11,6 +11,7 @@ public class ShooterEnemy : MonoBehaviour, iDamage
     public NavMeshAgent Agent;
     [SerializeField] int HP;
     [SerializeField] Renderer Model;
+    [SerializeField] Transform headPos;
     public Transform Player;
     public LayerMask Ground, WherePlayer;
 
@@ -46,20 +47,20 @@ public class ShooterEnemy : MonoBehaviour, iDamage
     // Update is called once per frame
     void Update()
     {
-        isinSight = Physics.CheckSphere(transform.position, Sightrange, WherePlayer);
-        isinRange = Physics.CheckSphere(transform.position, Shootrange, WherePlayer);
+        isinSight = Physics.CheckSphere(transform.position, Sightrange, WherePlayer); // checks how far it can see the player and what you want to put im for it
+        isinRange = Physics.CheckSphere(transform.position, Shootrange, WherePlayer); //Checks how far it can shoot the player and what you want to put im for it
 
-        if (!isinSight)
+        if (!isinSight) // if not in sight, it patrols around its area
         {
-            PatrolingArea();
+            PatrolingArea(); 
 
         }
-        if (isinSight && !isinRange)
+        if (isinSight && !isinRange) // If it sees you,it will chase you but not attack you until your in range
         {
             Chasing();
         }
-        if (isinSight && isinRange)
-        {
+        if (isinSight && isinRange)   // if in sight and range to attack, it would start shooting you
+        { 
             Shooting();
 
         }
@@ -112,7 +113,7 @@ public class ShooterEnemy : MonoBehaviour, iDamage
             }
         }
     }
-    IEnumerator flashColor()
+    IEnumerator flashColor() 
     {
         Model.material.color = Color.red;
         yield return new WaitForSeconds(.15f);
@@ -131,31 +132,31 @@ public class ShooterEnemy : MonoBehaviour, iDamage
 
     }
 
-    public void PatrolingArea()
+    public void PatrolingArea()  
     {
-        if (!IsWalking)
+        if (!IsWalking)  // if its not walking, it will begin to walk in its range
         {
             SearchWalkroad();
         }
-        if (IsWalking)
+        if (IsWalking) // if it is walking, it would search what its walk range is and move around in that range
         {
             Agent.SetDestination(WalkPoint);
         }
 
-        Vector3 DistanceWalking = transform.position - WalkPoint;
+        Vector3 DistanceWalking = transform.position - WalkPoint;  // calucating its walking distance 
 
-        if (DistanceWalking.magnitude < 1f)
+        if (DistanceWalking.magnitude < 1f) // if its lower than one, you reached the walkpoint and stopped walking and will search for a new one
         {
             IsWalking = false;
         }
     }
     private void SearchWalkroad()
     {
-        float RandomZ = Random.Range(-walkpointRange, walkpointRange);
-        float RandomX = Random.Range(-walkpointRange, walkpointRange);
-        WalkPoint = new Vector3(transform.position.x + RandomX, transform.position.y, transform.position.z + RandomZ);
+        float RandomZ = Random.Range(-walkpointRange, walkpointRange); // randomizing the range where it would walk on Z plane
+        float RandomX = Random.Range(-walkpointRange, walkpointRange); // randomizing the range where it would walk on x plane
+        WalkPoint = new Vector3(transform.position.x + RandomX, transform.position.y, transform.position.z + RandomZ); // adds the random range to the enemy amd keep Y the same
 
-        if (Physics.Raycast(WalkPoint, -transform.up, 2f, Ground))
+        if (Physics.Raycast(WalkPoint, -transform.up, 2f, Ground)) // to check if its on the groud of the map and will walk if it is
         {
             IsWalking = true;
         }
@@ -163,7 +164,7 @@ public class ShooterEnemy : MonoBehaviour, iDamage
     }
     public void Chasing()
     {
-        Agent.SetDestination(Player.position);
+        Agent.SetDestination(Player.position); // Chases the player
     }
 
     private void ResetShooting()
