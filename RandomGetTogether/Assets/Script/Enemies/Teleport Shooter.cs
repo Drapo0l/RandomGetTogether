@@ -9,6 +9,7 @@ public class TeleportShooter : MonoBehaviour, iDamage
     [Header("Basics")]
     [SerializeField] Renderer Model;
     [SerializeField] int HP;
+    [SerializeField] Transform headPos;
     Color colorOrig;
     public NavMeshAgent Agent;
     public Transform playerChara;
@@ -39,6 +40,17 @@ public class TeleportShooter : MonoBehaviour, iDamage
     bool IsinSight;
     bool isinRange;
 
+    //roam
+    bool Isroaming;
+    [SerializeField] int RoamTimer;
+    [SerializeField] int RoamDist;
+  //  [SerializeField] int Viewangle;
+    [SerializeField] int faceTargetSpeed;
+    bool PlayerRange; 
+    Vector3 StartPos;
+    Vector3 PlayerDir;
+    float AngleToPlayer;
+    float stoppingDistOrig;
     void Awake()
     {
         colorOrig = Model.material.color;
@@ -50,58 +62,61 @@ public class TeleportShooter : MonoBehaviour, iDamage
     // Update is called once per frame
     void Update()
     {
-        IsinSight = Physics.CheckSphere(transform.position, SightRange, WherePlayer);
-        isinRange = Physics.CheckSphere(transform.position, Shootrange, WherePlayer);
-        if (!IsinSight)
+        IsinSight = Physics.CheckSphere(transform.position, SightRange, WherePlayer); // checks how far it can see the player and what you want to put im for it
+        isinRange = Physics.CheckSphere(transform.position, Shootrange, WherePlayer); //Checks how far it can shoot the player and what you want to put im for it
+        if (!IsinSight) // if not in sight, it patrols around its area
         {
             Patroling();
-
         }
-        if (IsinSight && !isinRange)
+        if (IsinSight && !isinRange) // If it sees you,it will chase you but not attack you until your in range
         {
             CHASE();
         }
-        if (IsinSight && isinRange)
+        if (IsinSight && isinRange) // if in sight and range to attack, it would start shooting you
         {
-
-            Shooting();
-
-
+           Shooting();
+        }
+        if(PlayerRange && !CanseePlayer())
+        {
+            if (!Isroaming && Agent.remainingDistance < 0.05f)
+            {
+                StartCoroutine(roam());
+            }
         }
     }
     public void Patroling()
     {
-        if (!IsWalk)
+        if (!IsWalk)   // if its not walking, it will begin to walk in its range
         {
             SearchWalkpath();
         }
-        if (IsWalk)
+        if (IsWalk) // if it is walking, it would search what its walk range is and move around in that range
         {
             Agent.SetDestination(WalkingPoint);
         }
 
-        Vector3 DistanceWalking = transform.position - WalkingPoint;
+        Vector3 DistanceWalking = transform.position - WalkingPoint; // calucating its walking distance 
 
-        if (DistanceWalking.magnitude < 1f)
+        if (DistanceWalking.magnitude < 1f) // if its lower than one, you reached the walkpoint and stopped walking and will search for a new one
         {
             IsWalk = false;
         }
     }
     private void SearchWalkpath()
     {
-        float RandomZ = Random.Range(-Walkpointrange, Walkpointrange);
-        float RandomX = Random.Range(-Walkpointrange, Walkpointrange);
-        WalkingPoint = new Vector3(transform.position.x + RandomX, transform.position.y, transform.position.z + RandomZ);
+        float RandomZ = Random.Range(-Walkpointrange, Walkpointrange);  // randomizing the range where it would walk on Z plane
+        float RandomX = Random.Range(-Walkpointrange, Walkpointrange); // randomizing the range where it would walk on x plane
+        WalkingPoint = new Vector3(transform.position.x + RandomX, transform.position.y, transform.position.z + RandomZ); // adds the random range to the enemy amd keep Y the same
 
-        if (Physics.Raycast(WalkingPoint, -transform.up, 2f, Ground))
+        if (Physics.Raycast(WalkingPoint, -transform.up, 2f, Ground)) // to check if its on the groud of the map and will walk if it is
         {
             IsWalk = true;
         }
 
     }
-    public void CHASE()
+    public void CHASE() // Chases the player
     {
-        Agent.SetDestination(playerChara.position);
+        Agent.SetDestination(playerChara.position); 
 
     }
     private void Shooting()
@@ -113,7 +128,7 @@ public class TeleportShooter : MonoBehaviour, iDamage
         if (Physics.Raycast(transform.position, directionToPlayer, out hit, Shootrange))
         {
             // Check if the raycast hit the player
-            if (hit.transform.CompareTag("Player") || hit.transform.parent.CompareTag("Player"))
+            if (hit.transform.CompareTag("Player") || hit.transform.parent.CompareTag("Player"))   
             {
                 // Make the enemy face the player
                 Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
@@ -151,11 +166,11 @@ public class TeleportShooter : MonoBehaviour, iDamage
     }
     void Teleport()
     {
-        float X = Random.Range(-Xrange, Xrange);
-        float Y = Random.Range(0, Yrange);
-        float Z = Random.Range(-Zrange, Zrange);
-        transform.position = new Vector3(X, Y, Z);
-        transform.LookAt(GameManager.Instance.TeleportAnchor.transform);
+        float X = Random.Range(-Xrange, Xrange); // teleports it through the random X range you gave it
+        float Y = Random.Range(0, Yrange); // alwways keep this 0 unless you want it to go up, becasuse it would go down if not 0
+        float Z = Random.Range(-Zrange, Zrange); // teleports it through the random X range you gave it
+        transform.position = new Vector3(X, Y, Z); //Sets it as the new postiton of the enemy 
+        transform.LookAt(GameManager.Instance.TeleportAnchor.transform); // Teleports around the Anchor and won't teleport out of its range
     }
 
     IEnumerator flashColor()
@@ -176,9 +191,73 @@ public class TeleportShooter : MonoBehaviour, iDamage
         }
 
     }
+
+    IEnumerator roam()
+    {
+        Isroaming = true;
+        yield return new WaitForSeconds(RoamTimer);
+
+        Agent.stoppingDistance = 0;
+        Vector3 randomPos = Random.insideUnitSphere * RoamDist;
+        randomPos += StartPos;
+        NavMeshHit Hit;
+        NavMesh.SamplePosition(randomPos, out Hit, RoamDist, 1);
+        Agent.SetDestination(Hit.position);
+        Isroaming = false;
+    }
     private void ResetShooting()
     {
         Isshooting = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            PlayerRange = true; 
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            PlayerRange = false;
+        }
+    }
+
+    bool CanseePlayer()
+    {
+        PlayerDir = GameManager.Instance.Player.transform.position - headPos.position;
+        AngleToPlayer = Vector3.Angle(PlayerDir, transform.forward);
+        Debug.DrawRay(headPos.position, PlayerDir);
+        RaycastHit hit; 
+        if(Physics.Raycast(headPos.position,PlayerDir, out hit))
+        {
+            if(hit.collider.CompareTag("Player") && AngleToPlayer <= SightRange) 
+            {
+                Agent.SetDestination(GameManager.Instance.Player.transform.position);
+                if(Agent.remainingDistance <= Agent.stoppingDistance)
+                {
+                    FaceTarget();
+                }
+
+                if (!Isshooting)
+                {
+                    Shooting();
+                }
+            }
+            Agent.stoppingDistance = stoppingDistOrig;
+            return true;
+        }
+        Agent.stoppingDistance = 0; 
+        return false;
+    } 
+
+    void FaceTarget()
+    {
+        Quaternion rot = Quaternion.LookRotation(PlayerDir);
+        transform.rotation = Quaternion.Lerp(transform.rotation,rot,Time.deltaTime * faceTargetSpeed);
     }
 }
 
