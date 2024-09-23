@@ -24,4 +24,17 @@ public class ButtonfuntionsS : MonoBehaviour
 Application.Quit();
 #endif
     }
+    public void Respawn()
+    {
+        
+    }
+
+    public void Start_Button()
+    {
+        GameManager.Instance.Player_HP_Bar.enabled = true;
+        GameManager.Instance.AmmoC.enabled = true;
+        GameManager.Instance.AmmoM.enabled = true;
+        GameManager.Instance.unpausedState();
+        GameManager.Instance.Menu_Start.SetActive(false);
+    }
 }
