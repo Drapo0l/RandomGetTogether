@@ -80,6 +80,7 @@ public class GameManager : MonoBehaviour
             }
         }
         UpdateHealthBar();
+        updateGgoal();
     }
 
     public void pausedState() 
@@ -100,17 +101,9 @@ public class GameManager : MonoBehaviour
         Menu_Active = null;
     }
 
-    public void updateGgoal(int ammount) 
+    public void updateGgoal() 
     {
-       
-      /*  if (1 <= 0)
-        {
-            
-            pausedState();
-            Menu_Active = Menu_Win;
-            Menu_Active.SetActive(true); 
-        }
-      */
+      
         if(PlayerScript.health == 0)
         {
             Defeat();
@@ -120,6 +113,13 @@ public class GameManager : MonoBehaviour
     {
         pausedState();
         Menu_Active = Menu_Lose;
+        Menu_Active.SetActive(true);
+    }
+
+    public void Win()
+    {
+        pausedState();
+        Menu_Active = Menu_Win;
         Menu_Active.SetActive(true);
     }
    public IEnumerator dmgflash()
