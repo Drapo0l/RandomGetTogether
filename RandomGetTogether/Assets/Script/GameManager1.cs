@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
             float healthPercentage = PlayerScript.health / PlayerScript.maxHealth;
             Player_HP_Bar.fillAmount = healthPercentage; // Updates the health bar fill amount
             Gdmg.color = new Color(255, 0, 0, 100 - healthPercentage);
-            GoldC.text = gold.ToString("F0");
+            GoldC.text = gold.ToString("F0");            
         }
     }
 
@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
             }
         }
         UpdateHealthBar();
-        updateGgoal();
+        
     }
 
     public void pausedState() 
@@ -99,15 +99,6 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Menu_Pause.SetActive(paused);
         Menu_Active = null;
-    }
-
-    public void updateGgoal() 
-    {
-      
-        if(PlayerScript.health == 0)
-        {
-            Defeat();
-        }
     }
     public void Defeat()
     {
