@@ -12,10 +12,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject Menu_Win; 
     [SerializeField] GameObject Menu_Pause; 
     [SerializeField] GameObject Menu_Lose;
-   public Image Gdmg;
-   public GameObject Menu_Start;
+    public Image Gdmg;
+    public GameObject Menu_Start;
     public Image Player_HP_Bar;
-   public TMP_Text AmmoC,AmmoM;
+    public TMP_Text AmmoC,AmmoM;
     public TMP_Text GoldC;
 
 
@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
         Player = GameObject.FindWithTag("Player");
         TeleportAnchor = GameObject.FindWithTag("SpawnPoint"); 
         PlayerScript = Player.GetComponent<PlayerMovement>();
-        pausedState();
+        //pausedState(); //commented so game does not start paused
 
 
     }
@@ -51,10 +51,10 @@ public class GameManager : MonoBehaviour
     }
     public void UpdateHealthBar()
     {
-        
+
         if (PlayerScript != null)
         {
-            
+
             // Assuming PlayerScript has a 'health' and 'maxHealth' variable
             float healthPercentage = PlayerScript.health / PlayerScript.maxHealth;
             Player_HP_Bar.fillAmount = healthPercentage; // Updates the health bar fill amount
