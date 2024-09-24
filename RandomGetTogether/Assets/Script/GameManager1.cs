@@ -29,7 +29,7 @@ public class GameManager : MonoBehaviour
     public bool paused;  
     float timeScale_OG; 
     public GameObject TeleportAnchor;
-  
+    public int gold;
     int enemyCount;
 
     // Start is called before the first frame update
@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
             // Assuming PlayerScript has a 'health' and 'maxHealth' variable
             float healthPercentage = PlayerScript.health / PlayerScript.maxHealth;
             Player_HP_Bar.fillAmount = healthPercentage; // Updates the health bar fill amount
-            Gdmg.color = new Color(255, 0, 0, healthPercentage);
+            Gdmg.color = new Color(255, 0, 0, 100 - healthPercentage);
         }
     }
 
