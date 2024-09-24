@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
             float healthPercentage = PlayerScript.health / PlayerScript.maxHealth;
             Player_HP_Bar.fillAmount = healthPercentage; // Updates the health bar fill amount
             Gdmg.color = new Color(255, 0, 0, 100 - healthPercentage);
+            GoldC.text = gold.ToString("F0");
         }
     }
 
