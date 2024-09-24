@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: teleport shooter Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 3173749727562679067, guid: 0da7c76b33a141444b118456ed514c15, type: 3}
+      propertyPath: m_TagString
+      value: Enemy
+      objectReference: {fileID: 0}
     - target: {fileID: 5697818770659991466, guid: 0da7c76b33a141444b118456ed514c15, type: 3}
       propertyPath: m_RootOrder
       value: 1

@@ -119,10 +119,8 @@ public class SwitchWeapons : MonoBehaviour
         int availableIndex;
         // Change layer to equipped weapon
         weapon.gameObject.layer = LayerMask.NameToLayer("EquippedWeapon");
-        if (weapons[selectedWeapon] == null)
-            availableIndex = weapons.FindIndex(w => w == null);// Find the first empty slot (null) in the weapons list
-        else
-            availableIndex = selectedWeapon;
+        availableIndex = weapons.FindIndex(w => w == null);// Find the first empty slot (null) in the weapons list
+        selectedWeapon = availableIndex;
 
 
         if (availableIndex != -1)

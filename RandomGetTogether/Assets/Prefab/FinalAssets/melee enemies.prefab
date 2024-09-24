@@ -1953,7 +1953,7 @@ GameObject:
   - component: {fileID: 3940927146710199074}
   m_Layer: 0
   m_Name: melee enemies
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2014,10 +2014,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0
-  m_Height: 2
+  m_Radius: 0.07
+  m_Height: 0.1
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 0.05, z: 0}
 --- !u!54 &392860161671357239
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2061,7 +2061,7 @@ MonoBehaviour:
   Model: {fileID: 6927050629799633569}
   HP: 20
   agent: {fileID: 3940927146710199074}
-  player: {fileID: 0}
+  player: {fileID: 1116744396384935184, guid: 3e90f13fcc69bcc45b6f35b7e6a06f97, type: 3}
   Ground:
     serializedVersion: 2
     m_Bits: 1024
