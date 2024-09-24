@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject Menu_Win; 
     [SerializeField] GameObject Menu_Pause; 
     [SerializeField] GameObject Menu_Lose;
+    [SerializeField] GameObject GdmgB;
     public Image Gdmg;
     public GameObject Menu_Start;
     public Image Player_HP_Bar;
@@ -29,7 +30,7 @@ public class GameManager : MonoBehaviour
     public bool paused;  
     float timeScale_OG; 
     public GameObject TeleportAnchor;
-    public int gold;
+    public int gold = 0;
     int enemyCount;
 
     // Start is called before the first frame update
@@ -107,11 +108,13 @@ public class GameManager : MonoBehaviour
       
         if(Player.GetComponent<PlayerMovement>().health <=0)
         {
+            GdmgB.SetActive(false);
             Defeat();
         }
     }
     public void Defeat()
     {
+        
         pausedState();
         Menu_Active = Menu_Lose;
         Menu_Active.SetActive(true);
