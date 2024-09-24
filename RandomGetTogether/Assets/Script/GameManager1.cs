@@ -11,9 +11,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject Menu_Active; 
     [SerializeField] GameObject Menu_Win; 
     [SerializeField] GameObject Menu_Pause; 
-    [SerializeField] GameObject Menu_Lose; 
-    public Image Player_HP_Bar; 
-    [SerializeField] TMP_Text EnemyCount_Text; 
+    [SerializeField] GameObject Menu_Lose;
+    public Image Gdmg;
+    public GameObject Menu_Start;
+    public Image Player_HP_Bar;
+    public TMP_Text AmmoC,AmmoM;
+    public TMP_Text GoldC;
+
+
 
     public GameObject DMG_Screen; 
     public static GameManager Instance;
@@ -23,8 +28,8 @@ public class GameManager : MonoBehaviour
     int Enemy_Count;
     public bool paused;  
     float timeScale_OG; 
-    public GameObject TeleportAnchor;  
- 
+    public GameObject TeleportAnchor;
+  
     int enemyCount;
 
     // Start is called before the first frame update
@@ -35,16 +40,25 @@ public class GameManager : MonoBehaviour
         timeScale_OG = Time.timeScale;
         Player = GameObject.FindWithTag("Player");
         TeleportAnchor = GameObject.FindWithTag("SpawnPoint"); 
-        PlayerScript = Player.GetComponent<PlayerMovement>(); 
-    }
+        PlayerScript = Player.GetComponent<PlayerMovement>();
+        //pausedState(); //commented so game does not start paused
 
+
+    }
+    void Start()
+    {
+       
+    }
     public void UpdateHealthBar()
     {
+
         if (PlayerScript != null)
         {
+
             // Assuming PlayerScript has a 'health' and 'maxHealth' variable
             float healthPercentage = PlayerScript.health / PlayerScript.maxHealth;
             Player_HP_Bar.fillAmount = healthPercentage; // Updates the health bar fill amount
+            Gdmg.color = new Color(255, 0, 0, healthPercentage);
         }
     }
 
@@ -87,15 +101,15 @@ public class GameManager : MonoBehaviour
 
     public void updateGgoal(int ammount) 
     {
-        Enemy_Count += ammount; 
-        EnemyCount_Text.text = Enemy_Count.ToString("F0"); 
-        if (Enemy_Count <= 0)
+       
+      /*  if (1 <= 0)
         {
             
             pausedState();
             Menu_Active = Menu_Win;
             Menu_Active.SetActive(true); 
         }
+      */
         if(PlayerScript.health == 0)
         {
             Defeat();
