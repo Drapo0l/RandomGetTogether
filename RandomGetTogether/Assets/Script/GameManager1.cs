@@ -125,7 +125,8 @@ public class GameManager : MonoBehaviour
    public IEnumerator dmgflash()
     {
         DMG_Screen.SetActive(true);
-        yield return new WaitForSeconds(0.5f);
+        
+        yield return new WaitForEndOfFrame();
         DMG_Screen.SetActive(false);
     }
 }

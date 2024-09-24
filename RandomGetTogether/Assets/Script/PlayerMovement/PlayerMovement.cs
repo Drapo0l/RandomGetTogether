@@ -355,12 +355,8 @@ public class PlayerMovement : MonoBehaviour,iDamage
     {
 
         health -= amount;
-        
-        if (health <= 0)
-        {
-            Destroy(gameObject);
-        }
-
+        StartCoroutine(GameManager.Instance.dmgflash());
+       
     }
 
 }
