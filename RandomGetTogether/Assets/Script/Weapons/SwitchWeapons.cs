@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SwitchWeapons : MonoBehaviour
@@ -146,6 +147,9 @@ public class SwitchWeapons : MonoBehaviour
             SelectWeapon(selectedWeapon);
         }
 
+        //turn off box collider
+        weapon.GetComponent<BoxCollider>().enabled = false;
+
         // Disable physics on the weapon
         Rigidbody rb = weapon.GetComponent<Rigidbody>();
         if (rb != null)
@@ -183,6 +187,9 @@ public class SwitchWeapons : MonoBehaviour
 
         // Change layer to normal weapon
         weaponToDrop.gameObject.layer = LayerMask.NameToLayer("Weapons");
+
+        //turn on box collider
+        weaponToDrop.GetComponent<BoxCollider>().enabled = true;
 
         // Enable physics
         Rigidbody rb = weaponToDrop.GetComponent<Rigidbody>();

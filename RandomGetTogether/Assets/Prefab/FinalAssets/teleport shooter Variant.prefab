@@ -61,6 +61,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8288521128849750469, guid: 0da7c76b33a141444b118456ed514c15, type: 3}
+      propertyPath: Anchor
+      value: 
+      objectReference: {fileID: 7460337845863993704}
+    - target: {fileID: 8288521128849750469, guid: 0da7c76b33a141444b118456ed514c15, type: 3}
       propertyPath: Bullet
       value: 
       objectReference: {fileID: 5857773930328722495, guid: cbe9ade82b49e934c973983b9097178f, type: 3}
@@ -76,6 +80,10 @@ PrefabInstance:
       propertyPath: shootForce
       value: 70
       objectReference: {fileID: 0}
+    - target: {fileID: 8288521128849750469, guid: 0da7c76b33a141444b118456ed514c15, type: 3}
+      propertyPath: playerChara
+      value: 
+      objectReference: {fileID: 1116744396384935184, guid: 3e90f13fcc69bcc45b6f35b7e6a06f97, type: 3}
     - target: {fileID: 8288521128849750469, guid: 0da7c76b33a141444b118456ed514c15, type: 3}
       propertyPath: shootUpForce
       value: 0
@@ -116,3 +124,8 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &7460337845863993704 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5697818770659991466, guid: 0da7c76b33a141444b118456ed514c15, type: 3}
+  m_PrefabInstance: {fileID: 2925868908870995650}
+  m_PrefabAsset: {fileID: 0}
