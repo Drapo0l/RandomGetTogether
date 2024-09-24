@@ -6,12 +6,14 @@ using TMPro;
 
 
 
+
 public class GameManager : MonoBehaviour   
 {
     [SerializeField] GameObject Menu_Active; 
     [SerializeField] GameObject Menu_Win; 
     [SerializeField] GameObject Menu_Pause; 
     [SerializeField] GameObject Menu_Lose;
+    [SerializeField] GameObject GdmgB;
     public Image Gdmg;
     public GameObject Menu_Start;
     public Image Player_HP_Bar;
@@ -29,7 +31,7 @@ public class GameManager : MonoBehaviour
     public bool paused;  
     float timeScale_OG; 
     public GameObject TeleportAnchor;
-  
+    public int gold = 0;
     int enemyCount;
 
 
@@ -57,9 +59,12 @@ public class GameManager : MonoBehaviour
         {
 
             // Assuming PlayerScript has a 'health' and 'maxHealth' variable
-            float healthPercentage = PlayerScript.health / PlayerScript.maxHealth;
+            float healthPercentage = Player.GetComponent<PlayerMovement>().health / Player.GetComponent<PlayerMovement>().maxHealth;
+            healthPercentage = healthPercentage * 100;
             Player_HP_Bar.fillAmount = healthPercentage; // Updates the health bar fill amount
-            Gdmg.color = new Color(255, 0, 0, healthPercentage);
+            Gdmg.color = new Color(255, 0, 0, 100 - healthPercentage);
+            //GoldC.text = gold.ToString("F0");
+            
         }
     }
 
@@ -80,6 +85,7 @@ public class GameManager : MonoBehaviour
             }
         }
         UpdateHealthBar();
+       
     }
 
     public void pausedState() 
@@ -100,32 +106,34 @@ public class GameManager : MonoBehaviour
         Menu_Active = null;
     }
 
-    public void updateGgoal(int ammount) 
+    public void updateGgoal() 
     {
-       
-      /*  if (1 <= 0)
+      
+        if(Player.GetComponent<PlayerMovement>().health <=0)
         {
-            
-            pausedState();
-            Menu_Active = Menu_Win;
-            Menu_Active.SetActive(true); 
-        }
-      */
-        if(PlayerScript.health == 0)
-        {
+            GdmgB.SetActive(false);
             Defeat();
         }
     }
     public void Defeat()
     {
+        
         pausedState();
         Menu_Active = Menu_Lose;
         Menu_Active.SetActive(true);
     }
+
+    public void Win()
+    {
+        pausedState();
+        Menu_Active = Menu_Win;
+        Menu_Active.SetActive(true);
+    }
    public IEnumerator dmgflash()
     {
+        
         DMG_Screen.SetActive(true);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForEndOfFrame();
         DMG_Screen.SetActive(false);
     }
 }

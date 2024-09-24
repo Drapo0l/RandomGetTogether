@@ -16,6 +16,7 @@ public class ShooterEnemy : MonoBehaviour, iDamage
 
     [Header("Bullet")]
     [SerializeField] Transform Shotpostion;
+    [SerializeField] GameObject Muscle;
     [SerializeField] GameObject Bullet;
     [SerializeField] float shootrate;
     [SerializeField] float shootForce;
@@ -35,14 +36,11 @@ public class ShooterEnemy : MonoBehaviour, iDamage
     [SerializeField] float Shootrange;
     bool isinSight;
     bool isinRange;
-
-    //gold
-     int GoldEarn;
     // Start is called before the first frame update
-    void Start()
+    void Start() 
     {
-       
-        Agent = GetComponent<NavMeshAgent>();
+   
+  
         colorOrig = Model.material.color;
     }
 
@@ -147,8 +145,6 @@ public class ShooterEnemy : MonoBehaviour, iDamage
         flashColor();
         if (HP <= 0)
         {
-            GoldEarn = Random.Range(1, 20); 
-            GameManager.Instance.PlayerScript.Gold += GoldEarn;  
             Destroy(gameObject);
         }
 

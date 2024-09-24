@@ -19,11 +19,11 @@ public class FodderEnemy : MonoBehaviour, iDamage
     [SerializeField] float Sightrange;  
      bool isinSight;
 
-    //gold
-    int GoldEarn;
+
     void Start()
     {
-      
+        //player = GameObject.Find("Player").transform;
+        //agent = GetComponent<NavMeshAgent>();
         colorOrig = Model.material.color; 
     }
 
@@ -42,17 +42,17 @@ public class FodderEnemy : MonoBehaviour, iDamage
         }
     }
 
-    private void OnCollisionEnter(Collision player)
-    {
-        if(player.gameObject.CompareTag("Player"))
-        {
-            player.gameObject.GetComponent<PlayerMovement>().takeDamage(damage);
-            if (player.gameObject.GetComponent<PlayerMovement>().health <= 0)
-            {
+    //private void OnCollisionEnter(Collision player)
+    //{
+    //    if(player.gameObject.CompareTag("Player"))
+    //    {
+    //        GameManager.Instance.PlayerScript.takeDamage(damage);
+    //        if (player.gameObject.GetComponent<PlayerMovement>().health <= 0)
+    //        {
 
-            }
-        }
-    }
+    //        }
+    //    }
+    //}
 
     public void takeDamage(int amount)
     {
@@ -60,8 +60,6 @@ public class FodderEnemy : MonoBehaviour, iDamage
         StartCoroutine(flashColor());
         if (HP <= 0)
         {
-            GoldEarn = Random.Range(1, 20);
-            GameManager.Instance.PlayerScript.Gold += GoldEarn;  
             Destroy(gameObject);
         }
 

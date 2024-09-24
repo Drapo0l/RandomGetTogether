@@ -12,7 +12,6 @@ public class TeleportShooter : MonoBehaviour, iDamage
     [SerializeField] Transform headPos;
     Color colorOrig;
     [SerializeField] NavMeshAgent Agent;
-    
     [SerializeField] Transform Anchor;
     public LayerMask Ground, WherePlayer;
 
@@ -51,16 +50,11 @@ public class TeleportShooter : MonoBehaviour, iDamage
     Vector3 PlayerDir;
     float AngleToPlayer;
     float stoppingDistOrig;
-
-    //gold
-    int GoldEarn;
     void Start()
     {
-
         colorOrig = Model.material.color;
-  
         Anchor = GameObject.Find("SpawnPoint").transform;
-      
+        //Agent = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
@@ -209,8 +203,6 @@ public class TeleportShooter : MonoBehaviour, iDamage
         Teleport();
         if (HP <= 0)
         {
-            GoldEarn = Random.Range(1, 20);
-            GameManager.Instance.PlayerScript.Gold += GoldEarn;
             Destroy(gameObject);
         }
 
