@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour
 
             // Assuming PlayerScript has a 'health' and 'maxHealth' variable
             float healthPercentage = Player.GetComponent<PlayerMovement>().health / Player.GetComponent<PlayerMovement>().maxHealth;
+            healthPercentage = healthPercentage * 100;
             Player_HP_Bar.fillAmount = healthPercentage; // Updates the health bar fill amount
             Gdmg.color = new Color(255, 0, 0, 100 - healthPercentage);
             GoldC.text = gold.ToString("F0");
