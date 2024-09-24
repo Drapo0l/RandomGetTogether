@@ -24,10 +24,7 @@ public class ButtonfuntionsS : MonoBehaviour
 Application.Quit();
 #endif
     }
-    public void Respawn()
-    {
-        
-    }
+   
 
     public void Start_Button()
     {

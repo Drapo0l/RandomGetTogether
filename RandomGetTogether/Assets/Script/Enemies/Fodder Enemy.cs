@@ -8,8 +8,7 @@ public class FodderEnemy : MonoBehaviour, iDamage
     public int damage;
     [SerializeField] Renderer Model;
     [SerializeField] int HP;
-    public NavMeshAgent agent;
-    public Transform player;  
+    [SerializeField] NavMeshAgent agent;
     public LayerMask Ground, WherePlayer; 
     //Patroling
     public Vector3 WalkPoint;
@@ -21,10 +20,10 @@ public class FodderEnemy : MonoBehaviour, iDamage
      bool isinSight;
 
 
-    void Awake()
+    void Start()
     {
-        player = GameObject.Find("Player").transform;
-        agent = GetComponent<NavMeshAgent>();
+        //player = GameObject.Find("Player").transform;
+        //agent = GetComponent<NavMeshAgent>();
         colorOrig = Model.material.color; 
     }
 
@@ -43,17 +42,17 @@ public class FodderEnemy : MonoBehaviour, iDamage
         }
     }
 
-    private void OnCollisionEnter(Collision player)
-    {
-        if(player.gameObject.CompareTag("Player"))
-        {
-            player.gameObject.GetComponent<PlayerMovement>().takeDamage(damage);
-            if (player.gameObject.GetComponent<PlayerMovement>().health <= 0)
-            {
+    //private void OnCollisionEnter(Collision player)
+    //{
+    //    if(player.gameObject.CompareTag("Player"))
+    //    {
+    //        GameManager.Instance.PlayerScript.takeDamage(damage);
+    //        if (player.gameObject.GetComponent<PlayerMovement>().health <= 0)
+    //        {
 
-            }
-        }
-    }
+    //        }
+    //    }
+    //}
 
     public void takeDamage(int amount)
     {
@@ -97,7 +96,7 @@ public class FodderEnemy : MonoBehaviour, iDamage
     }
     public void Chase()
     {
-        agent.SetDestination(player.position); 
+        agent.SetDestination(GameManager.Instance.Player.transform.position); 
     }
 
     IEnumerator flashColor()
