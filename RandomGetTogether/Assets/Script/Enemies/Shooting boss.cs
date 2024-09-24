@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class Shootingboss : MonoBehaviour
 {
-    [SerializeField] NavMeshAgent Agent;
+    [SerializeField] NavMeshAgent Agent; 
     [SerializeField] float EnemyDistance;
     void Start()    
     {
