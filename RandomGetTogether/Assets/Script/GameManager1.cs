@@ -6,6 +6,7 @@ using TMPro;
 
 
 
+
 public class GameManager : MonoBehaviour   
 {
     [SerializeField] GameObject Menu_Active; 
@@ -57,7 +58,7 @@ public class GameManager : MonoBehaviour
         {
 
             // Assuming PlayerScript has a 'health' and 'maxHealth' variable
-            float healthPercentage = PlayerScript.health / PlayerScript.maxHealth;
+            float healthPercentage = Player.GetComponent<PlayerMovement>().health / Player.GetComponent<PlayerMovement>().maxHealth;
             Player_HP_Bar.fillAmount = healthPercentage; // Updates the health bar fill amount
             Gdmg.color = new Color(255, 0, 0, 100 - healthPercentage);
             GoldC.text = gold.ToString("F0");
