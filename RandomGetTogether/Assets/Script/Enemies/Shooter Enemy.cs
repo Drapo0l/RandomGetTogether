@@ -17,6 +17,7 @@ public class ShooterEnemy : MonoBehaviour, iDamage
 
     [Header("Bullet")]
     [SerializeField] Transform Shotpostion;
+    [SerializeField] GameObject Muscle;
     [SerializeField] GameObject Bullet;
     [SerializeField] float shootrate;
     [SerializeField] float shootForce;
