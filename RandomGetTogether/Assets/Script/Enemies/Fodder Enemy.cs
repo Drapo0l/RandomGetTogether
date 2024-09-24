@@ -8,8 +8,7 @@ public class FodderEnemy : MonoBehaviour, iDamage
     public int damage;
     [SerializeField] Renderer Model;
     [SerializeField] int HP;
-    public NavMeshAgent agent;
-    public Transform player;  
+    [SerializeField] NavMeshAgent agent;
     public LayerMask Ground, WherePlayer; 
     //Patroling
     public Vector3 WalkPoint;
@@ -20,11 +19,11 @@ public class FodderEnemy : MonoBehaviour, iDamage
     [SerializeField] float Sightrange;  
      bool isinSight;
 
-
-    void Awake()
+    //gold
+    int GoldEarn;
+    void Start()
     {
-        player = GameObject.Find("Player").transform;
-        agent = GetComponent<NavMeshAgent>();
+      
         colorOrig = Model.material.color; 
     }
 
@@ -61,6 +60,8 @@ public class FodderEnemy : MonoBehaviour, iDamage
         StartCoroutine(flashColor());
         if (HP <= 0)
         {
+            GoldEarn = Random.Range(1, 20);
+            GameManager.Instance.PlayerScript.Gold += GoldEarn;  
             Destroy(gameObject);
         }
 
@@ -97,7 +98,7 @@ public class FodderEnemy : MonoBehaviour, iDamage
     }
     public void Chase()
     {
-        agent.SetDestination(player.position); 
+        agent.SetDestination(GameManager.Instance.Player.transform.position); 
     }
 
     IEnumerator flashColor()

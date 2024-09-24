@@ -49,7 +49,10 @@ public class PlayerMovement : MonoBehaviour,iDamage
     public float maxSlopeAngle;
     private RaycastHit slopeHit;
     private bool exitingSlope;
-    
+
+    //gold
+    public int Gold;
+
     public Transform orientation;
 
     float horizontalInput;
@@ -76,6 +79,7 @@ public class PlayerMovement : MonoBehaviour,iDamage
 
     private void Start()
     {
+
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 

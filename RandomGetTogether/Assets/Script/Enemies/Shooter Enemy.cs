@@ -8,16 +8,14 @@ using UnityEngine.AI;
 public class ShooterEnemy : MonoBehaviour, iDamage
 {
     [Header("Basics")]
-    public NavMeshAgent Agent;
+    [SerializeField] NavMeshAgent Agent;
     [SerializeField] int HP;
     [SerializeField] Renderer Model;
     [SerializeField] Transform headPos;
-    public Transform Player;
     public LayerMask Ground, WherePlayer;
 
     [Header("Bullet")]
     [SerializeField] Transform Shotpostion;
-    [SerializeField] GameObject Muscle;
     [SerializeField] GameObject Bullet;
     [SerializeField] float shootrate;
     [SerializeField] float shootForce;
@@ -37,10 +35,13 @@ public class ShooterEnemy : MonoBehaviour, iDamage
     [SerializeField] float Shootrange;
     bool isinSight;
     bool isinRange;
+
+    //gold
+     int GoldEarn;
     // Start is called before the first frame update
-    void Awake()
+    void Start()
     {
-        Player = GameObject.Find("Player").transform;
+       
         Agent = GetComponent<NavMeshAgent>();
         colorOrig = Model.material.color;
     }
@@ -73,7 +74,7 @@ public class ShooterEnemy : MonoBehaviour, iDamage
     {
         // Check for a clear line of sight before shooting
         RaycastHit hit;
-        Vector3 directionToPlayer = Player.position - transform.position;
+        Vector3 directionToPlayer = GameManager.Instance.Player.transform.position - transform.position;
         // Perform the raycast to check for obstacles between enemy and player
         if (Physics.Raycast(transform.position, directionToPlayer, out hit, Shootrange))
         {
@@ -103,11 +104,11 @@ public class ShooterEnemy : MonoBehaviour, iDamage
         Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f); // Smooth rotation
 
-        Agent.SetDestination(Player.position);
+        Agent.SetDestination(GameManager.Instance.Player.transform.position);
         if (!Isshooting)
         {
             // Calculate the direction towards the player
-            Vector3 shootDirection = (Player.position - Shotpostion.position).normalized;
+            Vector3 shootDirection = (GameManager.Instance.Player.transform.position - Shotpostion.position).normalized;
 
             // Instantiate the bullet
             GameObject bulletInstance = Instantiate(Bullet, Shotpostion.position, Quaternion.identity);
@@ -146,6 +147,8 @@ public class ShooterEnemy : MonoBehaviour, iDamage
         flashColor();
         if (HP <= 0)
         {
+            GoldEarn = Random.Range(1, 20); 
+            GameManager.Instance.PlayerScript.Gold += GoldEarn;  
             Destroy(gameObject);
         }
 
@@ -183,7 +186,7 @@ public class ShooterEnemy : MonoBehaviour, iDamage
     }
     public void Chasing()
     {
-        Agent.SetDestination(Player.position); // Chases the player
+        Agent.SetDestination(GameManager.Instance.Player.transform.position); // Chases the player
     }
 
     private void ResetShooting()
