@@ -137,8 +137,9 @@ public class ProjectileWeapons : MonoBehaviour
 
 
         //Instantiate muzzle flash
-        if (muzzleFlash != null) StartCoroutine(FlashMuzzle());      
+        if (muzzleFlash != null) StartCoroutine(FlashMuzzle());
 
+        
         bulletsLeft--;
         bulletsShot++;
 
@@ -160,14 +161,14 @@ public class ProjectileWeapons : MonoBehaviour
     IEnumerator FlashMuzzle()
     {
         ////turn off plane with muzzle flash
-        //muzzleFlash.SetActive(true);
+        muzzleFlash.SetActive(true);
 
         //Wait for a brief moment to display the flash(you can adjust the time here)
 
-       yield return new WaitForSeconds(.1f);
+        yield return new WaitForSeconds(.1f);
 
         //turn on plane with muzzle flash
-        muzzleFlash.GetComponent<Mesh>();
+        muzzleFlash.SetActive(false);
     }
     private void ResetShot()
     {
