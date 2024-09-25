@@ -5,14 +5,20 @@ using UnityEngine;
 [System.Serializable]
 public class SlotsScript
 {
-    private ItemScript item;
-    private int quantity;
+   [SerializeField] private ItemScript item;
+   [SerializeField] private int quantity;
 
     public SlotsScript (ItemScript _item, int _quantity)
     {
         item = _item;
         quantity = _quantity;
 
+    }
+
+    public void Clear()
+    {
+        this.item = null;
+        this.quantity = 0;
     }
 
     public SlotsScript()
@@ -35,5 +41,15 @@ public class SlotsScript
     public void AddQuantity(int _quantity)
     {
         quantity += _quantity;
+    }
+    public void SubQuantity(int _quantity)
+    {
+        quantity -= _quantity;
+    }
+
+    public void AddItem(ItemScript item, int quantity)
+    {
+        this.quantity = quantity;
+
     }
 }

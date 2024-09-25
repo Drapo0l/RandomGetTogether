@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class ShopUI : MonoBehaviour
 {
@@ -12,24 +13,29 @@ public class ShopUI : MonoBehaviour
     [SerializeField] GameObject Inventory;
     [SerializeField] GameObject InventorySlot;
     [SerializeField] shopItems[] items;
-    
-    
+    [SerializeField] InventoryManager inventoryManager;
 
-   bool isOpen = false;
+
+    //To check if shop is open
+    bool isOpen = false;
 
 
     // Start is called before the first frame update
     void Start()
     {
+       
+        if(StoreFront != null)
         StoreFront.gameObject.SetActive(false);
+        if (playerPrompt != null)
         playerPrompt.SetActive(false);
         showShop();
         
-        //Make sure the shop is inactive
+        //Make sure the shop is inactive at start
     }
 
     void showShop()
     {
+        
         for (int i = StoreMenu.transform.childCount - 1; i >= 0; i--)
         {
             Destroy(StoreMenu.transform.GetChild(i).gameObject);
@@ -44,6 +50,7 @@ public class ShopUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if (isOpen && Input.GetKeyDown(KeyCode.RightShift))
         {
             CloseShop();

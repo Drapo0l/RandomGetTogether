@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using JetBrains.Annotations;
 
 
 
@@ -15,6 +16,13 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject Menu_Pause; 
     [SerializeField] GameObject Menu_Lose;
     [SerializeField] GameObject GdmgB;
+
+    [Header("-----Shop Fields-----")]
+    [SerializeField] public GameObject playerPrompt;
+    [SerializeField] public TMP_Text promptText;
+    [SerializeField] public GameObject Inventory;
+
+
     [Header("Menu objects")]
     public Image Gdmg;
     public GameObject Menu_Start;
