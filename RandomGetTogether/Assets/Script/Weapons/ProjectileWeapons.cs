@@ -1,40 +1,52 @@
 
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ProjectileWeapons : MonoBehaviour
 {
+    [Header("PlayerCollider")]
     public Collider playerCollider;
-    //bullet
+
+    [Header("Bullet")]
     public GameObject bullet;
 
-    //bullet force
-    public float shootForce, upwardForce, maxDistance;
+    [Header("Bullet Force")]
+    public float shootForce;
+    public float upwardForce;
+    public float maxDistance;
 
-    //Gun stats
-    public float timeBetweenShooting, spread, reloadTime, timeBetweenShots;
-    public int magazineSize, bulletPerTap;
+    [Header("Gun Stats")]
+    public float timeBetweenShooting;
+    public float spread;
+    public float reloadTime;
+    public float timeBetweenShots;
+    public int magazineSize;
+    public int bulletPerTap;
     public bool allowButtonHold;
 
     int bulletsLeft, bulletsShot;
 
-    //recoil
+    [Header("Recoil")]
     public Rigidbody playerRb;
     public float RecoilForce;
 
     //bools
     bool shooting, readyToShoot, reloading;
 
-    //Reference
+    [Header("Reference")]
     public Camera fpsCam;
     public Transform attackPoint;
 
-    //Graphics
+    [Header("Graphics")]
     public GameObject muzzleFlash;
     public TextMeshProUGUI ammunitionDisplay;
 
-
+    [Header("Sounds")]
+    [SerializeField] AudioSource aud;
+    [SerializeField] AudioClip[] audShoot;
+    [SerializeField] float audShootVol;
 
     //bug fixing :D
     public bool allowInvoke = true;
@@ -49,11 +61,14 @@ public class ProjectileWeapons : MonoBehaviour
 
     private void Update()
     {
-        MyInput();
+         
+            MyInput();
 
         //Set amo display, if it exists
-        if (ammunitionDisplay != null)
-            ammunitionDisplay.SetText(bulletsLeft / bulletPerTap + " / " + magazineSize / bulletPerTap);
+        if (ammunitionDisplay != null && spread == 0)
+            ammunitionDisplay.SetText(bulletsLeft + " / " + magazineSize);
+        else if (ammunitionDisplay != null)
+            ammunitionDisplay.SetText(bulletsLeft/bulletPerTap + " / " + magazineSize/bulletPerTap);
     }
 
     private void MyInput()
@@ -66,9 +81,11 @@ public class ProjectileWeapons : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading && this.gameObject.activeSelf) Reload();
         //reload automatically when trying to shoot without ammo
         if (readyToShoot && shooting && !reloading && bulletsLeft <= 0 && this.gameObject.activeSelf) Reload();
+        //automatically reload if no bullets left
+        if (bulletsLeft == 0 && !reloading && this.gameObject.activeSelf) Reload();
 
         //Shooting
-        if(readyToShoot && shooting && !reloading && bulletsLeft > 0)
+        if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
         {
             //Set bullet shot to 0
             bulletsShot = 0;
@@ -80,6 +97,8 @@ public class ProjectileWeapons : MonoBehaviour
 
     private void Shoot()
     {
+        aud.PlayOneShot(audShoot[Random.Range(0, audShoot.Length)], audShootVol);
+
         readyToShoot = false;
 
         //Find the exact hit position using a raycast
