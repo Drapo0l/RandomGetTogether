@@ -21,10 +21,12 @@ public class GameManager : MonoBehaviour
     public Image Player_HP_Bar;
     public TMP_Text AmmoC;
     public TMP_Text GoldC;
+    public TMP_Text hp_text;
     public GameObject ammoBox;
     public GameObject gold_box;
     public GameObject A_Player_hp_bar;
-    public GameObject DMG_Screen; 
+    public GameObject DMG_Screen;
+    [Header("other")]
     public static GameManager Instance;
     public GameObject Player;
     public PlayerMovement PlayerScript;
@@ -37,6 +39,9 @@ public class GameManager : MonoBehaviour
     //int enemyCount;
     float healthPercentage;
     float safe;
+    [Header("audio")]
+    public AudioClip[] AUDclick; 
+    [SerializeField] float AUDclickV;
 
 
     // Start is called before the first frame update
@@ -63,8 +68,9 @@ public class GameManager : MonoBehaviour
         {
             healthPercentage = 0;
             safe = 0;
+           hp_text.text = Player.GetComponent<PlayerMovement>().health.ToString("F0");
             // Assuming PlayerScript has a 'health' and 'maxHealth' variable
-             healthPercentage = Player.GetComponent<PlayerMovement>().health / Player.GetComponent<PlayerMovement>().maxHealth;
+            healthPercentage = Player.GetComponent<PlayerMovement>().health / Player.GetComponent<PlayerMovement>().maxHealth;
              safe = 70/100;
             safe = 1 - safe;
             safe = safe / 3;
@@ -113,6 +119,7 @@ public class GameManager : MonoBehaviour
     public void pausedState() 
     {
         GdmgB.SetActive(false);
+        Player.SetActive(false);
         paused = !paused;
         Time.timeScale = 0;
         Cursor.visible = true;
@@ -122,6 +129,7 @@ public class GameManager : MonoBehaviour
     public void unpausedState() 
     {
         GdmgB.SetActive(true);
+        Player.SetActive(true);
         paused = !paused;
         Time.timeScale = timeScale_OG;
         Cursor.visible = false;
