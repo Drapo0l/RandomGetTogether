@@ -15,12 +15,12 @@ public class TrigerDoorControler : MonoBehaviour
             if (openTriger)
             {
                 myDoor.Play("DoorOpenAnimation", 0, 0.0f);
-                gameObject.SetActive(false);
+               
             }
             else if (closeTriger)
             {
                 myDoor.Play("DoorCloseAnimation", 0, 0.0f);
-                gameObject.SetActive(false);
+                
             }
         }
     }
