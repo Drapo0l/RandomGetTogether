@@ -49,8 +49,8 @@ public class GameManager : MonoBehaviour
     float safe;
     [Header("audio")]
     public AudioClip[] AUDclick; 
-    [SerializeField] float AUDclickV;
-    
+   public float AUDclickV;
+    public AudioSource playerADU;
 
     // Start is called before the first frame update
     void Awake()
