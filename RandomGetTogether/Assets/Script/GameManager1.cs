@@ -33,11 +33,13 @@ public class GameManager : MonoBehaviour
     public GameObject TeleportAnchor;
     public int gold = 0;
     int enemyCount;
+    float healthPercentage;
+    float safe;
 
     // Start is called before the first frame update
     void Awake()
     {
-       
+      
         Instance = this;
         timeScale_OG = Time.timeScale;
         Player = GameObject.FindWithTag("Player");
@@ -53,16 +55,29 @@ public class GameManager : MonoBehaviour
     }
     public void UpdateHealthBar()
     {
-
+        Gdmg.color = new Color(255, 0, 0, 0);
         if (PlayerScript != null)
         {
-
+            healthPercentage = 0;
+            safe = 0;
             // Assuming PlayerScript has a 'health' and 'maxHealth' variable
-            float healthPercentage = Player.GetComponent<PlayerMovement>().health / Player.GetComponent<PlayerMovement>().maxHealth;
-            healthPercentage = healthPercentage * 100;
+             healthPercentage = Player.GetComponent<PlayerMovement>().health / Player.GetComponent<PlayerMovement>().maxHealth;
+             safe = 70/100;
+            safe = 1 - safe;
+            safe = safe / 3;
             Player_HP_Bar.fillAmount = healthPercentage; // Updates the health bar fill amount
-            Gdmg.color = new Color(255, 0, 0, 100 - healthPercentage);
-            //GoldC.text = gold.ToString("F0");
+            healthPercentage = 1 - healthPercentage;
+            healthPercentage = healthPercentage / 3;
+            if (healthPercentage < safe)
+            {
+                Gdmg.color = new Color(255, 0, 0, healthPercentage);
+            }
+            else
+            {
+                Gdmg.color = new Color(255, 0, 0, safe);
+            }
+           
+            GoldC.text = gold.ToString("F0");
             
         }
     }
