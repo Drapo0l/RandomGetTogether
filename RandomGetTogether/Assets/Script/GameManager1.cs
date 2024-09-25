@@ -68,7 +68,7 @@ public class GameManager : MonoBehaviour
         {
             healthPercentage = 0;
             safe = 0;
-           hp_text.text = Player.GetComponent<PlayerMovement>().health.ToString("F0");
+            //hp_text.text = Player.GetComponent<PlayerMovement>().health.ToString("F0");
             // Assuming PlayerScript has a 'health' and 'maxHealth' variable
             healthPercentage = Player.GetComponent<PlayerMovement>().health / Player.GetComponent<PlayerMovement>().maxHealth;
              safe = 70/100;

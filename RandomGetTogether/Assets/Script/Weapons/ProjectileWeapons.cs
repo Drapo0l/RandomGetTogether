@@ -1,6 +1,7 @@
 
 using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ProjectileWeapons : MonoBehaviour
@@ -12,11 +13,17 @@ public class ProjectileWeapons : MonoBehaviour
     public GameObject bullet;
 
     [Header("Bullet Force")]
-    public float shootForce, upwardForce, maxDistance;
+    public float shootForce;
+    public float upwardForce;
+    public float maxDistance;
 
     [Header("Gun Stats")]
-    public float timeBetweenShooting, spread, reloadTime, timeBetweenShots;
-    public int magazineSize, bulletPerTap;
+    public float timeBetweenShooting;
+    public float spread;
+    public float reloadTime;
+    public float timeBetweenShots;
+    public int magazineSize;
+    public int bulletPerTap;
     public bool allowButtonHold;
 
     int bulletsLeft, bulletsShot;
@@ -55,12 +62,13 @@ public class ProjectileWeapons : MonoBehaviour
     private void Update()
     {
          
-        MyInput();
+            MyInput();
 
         //Set amo display, if it exists
-        if (ammunitionDisplay != null)
-            ammunitionDisplay.SetText(bulletsLeft / bulletPerTap + " / " + magazineSize / bulletPerTap);
-        
+        if (ammunitionDisplay != null && spread == 0)
+            ammunitionDisplay.SetText(bulletsLeft + " / " + magazineSize);
+        else if (ammunitionDisplay != null)
+            ammunitionDisplay.SetText(bulletsLeft/bulletPerTap + " / " + magazineSize/bulletPerTap);
     }
 
     private void MyInput()
