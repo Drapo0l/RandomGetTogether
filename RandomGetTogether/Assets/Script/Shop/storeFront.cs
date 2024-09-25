@@ -8,6 +8,8 @@ public class storeFront : MonoBehaviour
     [SerializeField] GameObject playerPrompt;
     [SerializeField] TMP_Text promptText;
 
+    bool isActive = false;
+
     // Start is called before the first frame updateSB
     void Start()
     {
@@ -21,7 +23,12 @@ public class storeFront : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetButtonDown("Interact"))
+        {
+            isActive = !isActive;
+            GameManager.Instance.Inventory.SetActive(isActive);
+        }
+
     }
 
     public void OnTriggerStay(Collider other)
@@ -30,8 +37,8 @@ public class storeFront : MonoBehaviour
         {
             if (other.CompareTag("Player"))
             {
-                playerPrompt.SetActive(true);
-                promptText.SetText("Press E to Shop");
+                this.playerPrompt.SetActive(true);
+                promptText.SetText("Press R-Shift to Shop");
             }
         }
     }

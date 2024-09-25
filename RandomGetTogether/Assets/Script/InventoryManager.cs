@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class InventoryManager : MonoBehaviour
 {
+    public static InventoryManager Instance;
+
     [SerializeField] private GameObject slotHolder;
     [SerializeField] private ItemScript itemToAdd; 
     [SerializeField] private ItemScript itemToRemove;
@@ -20,6 +22,7 @@ public class InventoryManager : MonoBehaviour
 
     public void Start()
     {
+        Instance = this;
         slots = new GameObject[slotHolder.transform.childCount];
         items = new SlotsScript[slots.Length];
         for (int i = 0; i < items.Length; i++)

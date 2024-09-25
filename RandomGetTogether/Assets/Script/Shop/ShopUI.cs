@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class ShopUI : MonoBehaviour
@@ -15,20 +16,21 @@ public class ShopUI : MonoBehaviour
     [SerializeField] InventoryManager inventoryManager;
 
 
-
+    //To check if shop is open
     bool isOpen = false;
 
 
     // Start is called before the first frame update
     void Start()
     {
+       
         if(StoreFront != null)
         StoreFront.gameObject.SetActive(false);
         if (playerPrompt != null)
         playerPrompt.SetActive(false);
         showShop();
         
-        //Make sure the shop is inactive
+        //Make sure the shop is inactive at start
     }
 
     void showShop()
@@ -48,6 +50,7 @@ public class ShopUI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if (isOpen && Input.GetKeyDown(KeyCode.RightShift))
         {
             CloseShop();

@@ -16,8 +16,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject Menu_Lose;
     [SerializeField] GameObject GdmgB;
 
+    [Header("-----Shop Fields-----")]
     [SerializeField] public GameObject playerPrompt;
     [SerializeField] public TMP_Text promptText;
+    [SerializeField] public GameObject Inventory;
 
 
     public Image Gdmg;
