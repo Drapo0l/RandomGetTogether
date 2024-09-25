@@ -9,30 +9,32 @@ using TMPro;
 
 public class GameManager : MonoBehaviour   
 {
+    [Header("Menues")]
     [SerializeField] GameObject Menu_Active; 
     [SerializeField] GameObject Menu_Win; 
     [SerializeField] GameObject Menu_Pause; 
     [SerializeField] GameObject Menu_Lose;
     [SerializeField] GameObject GdmgB;
+    [Header("Menu objects")]
     public Image Gdmg;
     public GameObject Menu_Start;
     public Image Player_HP_Bar;
-    public TMP_Text AmmoC,AmmoM;
+    public TMP_Text AmmoC;
     public TMP_Text GoldC;
-
-
-
+    public GameObject ammoBox;
+    public GameObject gold_box;
+    public GameObject A_Player_hp_bar;
     public GameObject DMG_Screen; 
     public static GameManager Instance;
     public GameObject Player;
     public PlayerMovement PlayerScript;
     public CustomBullet Player_Dmg;
-    int Enemy_Count;
+    //int Enemy_Count;
     public bool paused;  
     float timeScale_OG; 
     public GameObject TeleportAnchor;
     public int gold = 0;
-    int enemyCount;
+    //int enemyCount;
     float healthPercentage;
     float safe;
 
@@ -46,13 +48,13 @@ public class GameManager : MonoBehaviour
         Player = GameObject.FindWithTag("Player");
         TeleportAnchor = GameObject.FindWithTag("SpawnPoint"); 
         PlayerScript = Player.GetComponent<PlayerMovement>();
-        //pausedState(); //commented so game does not start paused
+      
 
 
     }
     void Start()
     {
-       
+        StartG();
     }
     public void UpdateHealthBar()
     {
@@ -102,9 +104,15 @@ public class GameManager : MonoBehaviour
         UpdateHealthBar();
        
     }
-
+    public void StartG()
+    {
+        pausedState();
+        Menu_Active = Menu_Start;
+        Menu_Active.SetActive(true);
+    }
     public void pausedState() 
     {
+        GdmgB.SetActive(false);
         paused = !paused;
         Time.timeScale = 0;
         Cursor.visible = true;
@@ -113,6 +121,7 @@ public class GameManager : MonoBehaviour
 
     public void unpausedState() 
     {
+        GdmgB.SetActive(true);
         paused = !paused;
         Time.timeScale = timeScale_OG;
         Cursor.visible = false;
