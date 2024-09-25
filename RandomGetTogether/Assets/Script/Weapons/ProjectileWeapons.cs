@@ -66,9 +66,11 @@ public class ProjectileWeapons : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading && this.gameObject.activeSelf) Reload();
         //reload automatically when trying to shoot without ammo
         if (readyToShoot && shooting && !reloading && bulletsLeft <= 0 && this.gameObject.activeSelf) Reload();
+        //automatically reload if no bullets left
+        if (bulletsLeft == 0 && !reloading && this.gameObject.activeSelf) Reload();
 
         //Shooting
-        if(readyToShoot && shooting && !reloading && bulletsLeft > 0)
+        if (readyToShoot && shooting && !reloading && bulletsLeft > 0)
         {
             //Set bullet shot to 0
             bulletsShot = 0;

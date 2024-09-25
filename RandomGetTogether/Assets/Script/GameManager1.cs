@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
                 unpausedState();
             }
         }
-        UpdateHealthBar();
+        //UpdateHealthBar();
        
     }
 
