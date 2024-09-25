@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
     [Header("audio")]
     public AudioClip[] AUDclick; 
     [SerializeField] float AUDclickV;
-
+    
 
     // Start is called before the first frame update
     void Awake()
@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
         Player = GameObject.FindWithTag("Player");
         TeleportAnchor = GameObject.FindWithTag("SpawnPoint"); 
         PlayerScript = Player.GetComponent<PlayerMovement>();
-      
+        
 
 
     }
