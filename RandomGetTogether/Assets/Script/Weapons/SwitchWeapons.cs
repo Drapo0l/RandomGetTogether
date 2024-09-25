@@ -40,7 +40,7 @@ public class SwitchWeapons : MonoBehaviour
     }
 
     private void Update()
-    {
+    {   
         int previousSelectedWeapon = selectedWeapon;
 
         // Handle switching weapons with keys
@@ -61,6 +61,7 @@ public class SwitchWeapons : MonoBehaviour
         {
             DropWeapon(selectedWeapon);
         }
+        
     }
 
     private void SelectWeapon(int weaponIndex)

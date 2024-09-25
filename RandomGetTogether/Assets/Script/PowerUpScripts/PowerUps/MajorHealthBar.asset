@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2939519d5dbced499d666e51c72042e, type: 3}
   m_Name: MajorHealthBar
   m_EditorClassIdentifier: 
-  amount: 0
+  amount: 50

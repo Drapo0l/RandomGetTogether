@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerMovement : MonoBehaviour,iDamage
 {
@@ -50,8 +51,19 @@ public class PlayerMovement : MonoBehaviour,iDamage
     private RaycastHit slopeHit;
     private bool exitingSlope;
 
+    [Header("Sounds")]
+    [SerializeField] AudioSource aud;
+    [SerializeField] AudioClip[] audJump;
+    [SerializeField] float audJumpVol;
+    [SerializeField] AudioClip[] audHurt;
+    [SerializeField] float audHurtVol;
+    [SerializeField] AudioClip[] audWalk;
+    [SerializeField] float audWalkVol;
+
     //gold
     public int Gold;
+
+    bool isPlayingStop;
 
     public Transform orientation;
 
@@ -79,7 +91,7 @@ public class PlayerMovement : MonoBehaviour,iDamage
 
     private void Start()
     {
-
+        isPlayingStop = false;
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
@@ -92,19 +104,25 @@ public class PlayerMovement : MonoBehaviour,iDamage
 
     private void Update()
     {
-        //ground check
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
+        
+        
+            //ground check
+            grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
 
-        MyInput();
-        SpeedControl();
-        StateHandler(); 
+            MyInput();
+            SpeedControl();
+            StateHandler();
+            
 
-        //handle Drag
-        if (state == MovementState.walking || state == MovementState.sprinting || state == MovementState.crouching || state == MovementState.sliding)
-            rb.drag = groundDrag;
-        else
-            rb.drag = 0;
+            //handle Drag
+            if (state == MovementState.walking || state == MovementState.sprinting || state == MovementState.crouching || state == MovementState.sliding)
+                rb.drag = groundDrag;
+            else
+                rb.drag = 0;
+
+            if(grounded && moveDirection.magnitude > 0.3f && !isPlayingStop)
+                StartCoroutine(playSteps());
     }
 
     private void FixedUpdate()
@@ -272,6 +290,7 @@ public class PlayerMovement : MonoBehaviour,iDamage
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
 
+
         //on slope
         if (OnSlope() && !exitingSlope)
         {
@@ -283,10 +302,12 @@ public class PlayerMovement : MonoBehaviour,iDamage
 
         //on Ground
         else if (grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+        {
+            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);        
+        }
 
         //in air
-        else if(!grounded)
+        else if (!grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
 
         //turn gravity off while on slope
@@ -323,6 +344,8 @@ public class PlayerMovement : MonoBehaviour,iDamage
 
     private void Jump()
     {
+        aud.PlayOneShot(audJump[Random.Range(0, audJump.Length)], audJumpVol);
+
         exitingSlope = true;
 
         //reset y velocity
@@ -348,7 +371,25 @@ public class PlayerMovement : MonoBehaviour,iDamage
         return false;
     }
 
+    IEnumerator playSteps()
+    {
+        isPlayingStop = true;
 
+        //play walk sound
+        aud.PlayOneShot(audWalk[Random.Range(0, audWalk.Length)], audWalkVol);
+
+        if(state == MovementState.walking)
+        {
+            yield return new WaitForSeconds(.8f);
+           
+        }
+        else
+        {
+            yield return new WaitForSeconds(.3f);
+           
+        }
+        isPlayingStop = false;
+    }
 
     public Vector3 GetSlopeMoveDirection(Vector3 direction)
     {
@@ -357,7 +398,7 @@ public class PlayerMovement : MonoBehaviour,iDamage
 
     public void takeDamage(int amount)
     {
-
+        aud.PlayOneShot(audJump[Random.Range(0, audHurt.Length)], audHurtVol);
         health -= amount;
         StartCoroutine(GameManager.Instance.dmgflash());
         if(health <= 0)
