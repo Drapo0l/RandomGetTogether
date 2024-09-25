@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SwitchWeapons : MonoBehaviour
@@ -39,7 +40,7 @@ public class SwitchWeapons : MonoBehaviour
     }
 
     private void Update()
-    {
+    {   
         int previousSelectedWeapon = selectedWeapon;
 
         // Handle switching weapons with keys
@@ -60,6 +61,7 @@ public class SwitchWeapons : MonoBehaviour
         {
             DropWeapon(selectedWeapon);
         }
+        
     }
 
     private void SelectWeapon(int weaponIndex)
@@ -119,10 +121,8 @@ public class SwitchWeapons : MonoBehaviour
         int availableIndex;
         // Change layer to equipped weapon
         weapon.gameObject.layer = LayerMask.NameToLayer("EquippedWeapon");
-        if (weapons[selectedWeapon] == null)
-            availableIndex = weapons.FindIndex(w => w == null);// Find the first empty slot (null) in the weapons list
-        else
-            availableIndex = selectedWeapon;
+        availableIndex = weapons.FindIndex(w => w == null);// Find the first empty slot (null) in the weapons list
+        selectedWeapon = availableIndex;
 
 
         if (availableIndex != -1)
@@ -147,6 +147,9 @@ public class SwitchWeapons : MonoBehaviour
             // Select the newly picked-up weapon
             SelectWeapon(selectedWeapon);
         }
+
+        //turn off box collider
+        weapon.GetComponent<BoxCollider>().enabled = false;
 
         // Disable physics on the weapon
         Rigidbody rb = weapon.GetComponent<Rigidbody>();
@@ -185,6 +188,9 @@ public class SwitchWeapons : MonoBehaviour
 
         // Change layer to normal weapon
         weaponToDrop.gameObject.layer = LayerMask.NameToLayer("Weapons");
+
+        //turn on box collider
+        weaponToDrop.GetComponent<BoxCollider>().enabled = true;
 
         // Enable physics
         Rigidbody rb = weaponToDrop.GetComponent<Rigidbody>();

@@ -35,6 +35,10 @@ public class DashFunct : MonoBehaviour
     [Header("Input")]
     public KeyCode dashKey = KeyCode.E;
 
+    
+
+
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();

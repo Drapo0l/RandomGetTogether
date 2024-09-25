@@ -11,8 +11,7 @@ public class TeleportShooter : MonoBehaviour, iDamage
     [SerializeField] int HP;
     [SerializeField] Transform headPos;
     Color colorOrig;
-    public NavMeshAgent Agent;
-    public Transform playerChara;
+    [SerializeField] NavMeshAgent Agent;
     [SerializeField] Transform Anchor;
     public LayerMask Ground, WherePlayer;
 
@@ -51,12 +50,11 @@ public class TeleportShooter : MonoBehaviour, iDamage
     Vector3 PlayerDir;
     float AngleToPlayer;
     float stoppingDistOrig;
-    void Awake()
+    void Start()
     {
         colorOrig = Model.material.color;
-        playerChara = GameObject.Find("Player").transform;
         Anchor = GameObject.Find("SpawnPoint").transform;
-        Agent = GetComponent<NavMeshAgent>();
+        //Agent = GetComponent<NavMeshAgent>();
     }
 
     // Update is called once per frame
@@ -116,54 +114,72 @@ public class TeleportShooter : MonoBehaviour, iDamage
     }
     public void CHASE() // Chases the player
     {
-        Agent.SetDestination(playerChara.position); 
+        Agent.SetDestination(GameManager.Instance.Player.transform.position);   
 
     }
     private void Shooting()
     {
         // Check for a clear line of sight before shooting
         RaycastHit hit;
-        Vector3 directionToPlayer = playerChara.position - transform.position;
+        Vector3 directionToPlayer = GameManager.Instance.Player.transform.position - transform.position;
         // Perform the raycast to check for obstacles between enemy and player
         if (Physics.Raycast(transform.position, directionToPlayer, out hit, Shootrange))
         {
+            Transform Parent = hit.transform.parent;
             // Check if the raycast hit the player
-            if (hit.transform.CompareTag("Player") || hit.transform.parent.CompareTag("Player"))   
+            if (hit.transform.CompareTag("Player") || Parent != null)
             {
-                // Make the enemy face the player
-                Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
-                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f); // Smooth rotation
-
-                Agent.SetDestination(playerChara.position);
-                if (!Isshooting)
+                if (!hit.transform.CompareTag("Player") && Parent != null)
                 {
-                    // Calculate the direction towards the player
-                    Vector3 shootDirection = (playerChara.position - Shotpostion.position).normalized;
-
-                    // Instantiate the bullet
-                    GameObject bulletInstance = Instantiate(Bullet, Shotpostion.position, Quaternion.identity);
-                    Rigidbody body = bulletInstance.GetComponent<Rigidbody>();
-
-                    Collider enemyCollider = GetComponent<Collider>();
-                    Collider bulletCollider = bulletInstance.GetComponent<Collider>();
-
-                    // Ignore collision between enemy and bullet
-                    Physics.IgnoreCollision(enemyCollider, bulletCollider);
-
-                    //enemy no shoot himself
-                   Physics.IgnoreCollision(enemyCollider, bulletCollider);
-
-                    body.AddForce(shootDirection * shootForce, ForceMode.Impulse);
-                    body.AddForce(transform.up * shootUpForce, ForceMode.Impulse);
-
-
-                    //
-                    Isshooting = true;
-                    Invoke(nameof(ResetShooting), shootrate);
+                    if (Parent.CompareTag("Player"))
+                    {
+                        InstantiateBullet(directionToPlayer);
+                    }
+                }
+                else
+                {
+                    InstantiateBullet(directionToPlayer);
                 }
             }
         }
     }
+
+    private void InstantiateBullet(Vector3 directionToPlayer)
+    {
+
+        // Make the enemy face the player
+        Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * 5f); // Smooth rotation
+
+        Agent.SetDestination(GameManager.Instance.Player.transform.position);
+        if (!Isshooting)
+        {
+            // Calculate the direction towards the player
+            Vector3 shootDirection = (GameManager.Instance.Player.transform.position - Shotpostion.position).normalized;
+
+            // Instantiate the bullet
+            GameObject bulletInstance = Instantiate(Bullet, Shotpostion.position, Quaternion.identity);
+            Rigidbody body = bulletInstance.GetComponent<Rigidbody>();
+
+            Collider enemyCollider = GetComponent<Collider>();
+            Collider bulletCollider = bulletInstance.GetComponent<Collider>();
+
+            // Ignore collision between enemy and bullet
+            Physics.IgnoreCollision(enemyCollider, bulletCollider);
+
+            //enemy no shoot himself
+            Physics.IgnoreCollision(enemyCollider, bulletCollider);
+
+            body.AddForce(shootDirection * shootForce, ForceMode.Impulse);
+            body.AddForce(transform.up * shootUpForce, ForceMode.Impulse);
+
+
+            //
+            Isshooting = true;
+            Invoke(nameof(ResetShooting), shootrate);
+        }
+    }
+
     void Teleport()
     {
         float X = Random.Range(-Xrange, Xrange); // teleports it through the random X range you gave it
