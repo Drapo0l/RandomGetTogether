@@ -5,36 +5,41 @@ using UnityEngine;
 
 public class ProjectileWeapons : MonoBehaviour
 {
+    [Header("PlayerCollider")]
     public Collider playerCollider;
-    //bullet
+
+    [Header("Bullet")]
     public GameObject bullet;
 
-    //bullet force
+    [Header("Bullet Force")]
     public float shootForce, upwardForce, maxDistance;
 
-    //Gun stats
+    [Header("Gun Stats")]
     public float timeBetweenShooting, spread, reloadTime, timeBetweenShots;
     public int magazineSize, bulletPerTap;
     public bool allowButtonHold;
 
     int bulletsLeft, bulletsShot;
 
-    //recoil
+    [Header("Recoil")]
     public Rigidbody playerRb;
     public float RecoilForce;
 
     //bools
     bool shooting, readyToShoot, reloading;
 
-    //Reference
+    [Header("Reference")]
     public Camera fpsCam;
     public Transform attackPoint;
 
-    //Graphics
+    [Header("Graphics")]
     public GameObject muzzleFlash;
     public TextMeshProUGUI ammunitionDisplay;
 
-
+    [Header("Sounds")]
+    [SerializeField] AudioSource aud;
+    [SerializeField] AudioClip[] audShoot;
+    [SerializeField] float audShootVol;
 
     //bug fixing :D
     public bool allowInvoke = true;
@@ -49,11 +54,13 @@ public class ProjectileWeapons : MonoBehaviour
 
     private void Update()
     {
+         
         MyInput();
 
         //Set amo display, if it exists
         if (ammunitionDisplay != null)
             ammunitionDisplay.SetText(bulletsLeft / bulletPerTap + " / " + magazineSize / bulletPerTap);
+        
     }
 
     private void MyInput()
@@ -82,6 +89,8 @@ public class ProjectileWeapons : MonoBehaviour
 
     private void Shoot()
     {
+        aud.PlayOneShot(audShoot[Random.Range(0, audShoot.Length)], audShootVol);
+
         readyToShoot = false;
 
         //Find the exact hit position using a raycast
