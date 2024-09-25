@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.ParticleSystem;
 
 public class FodderEnemy : MonoBehaviour, iDamage
 {
@@ -19,11 +20,17 @@ public class FodderEnemy : MonoBehaviour, iDamage
     [SerializeField] float Sightrange;  
      bool isinSight;
 
+    [SerializeField] AudioSource Aud;
+    [SerializeField] AudioClip roboDeath;
+    [SerializeField] float AudrobotDeathVol;
+    [SerializeField] AudioClip RobotHit;
+    [SerializeField] float AudrobotHitVol;
+    [SerializeField] AudioClip[] Footsteps;
+    [SerializeField] float AudFootSteps;
+
 
     void Start()
     {
-        //player = GameObject.Find("Player").transform;
-        //agent = GetComponent<NavMeshAgent>();
         colorOrig = Model.material.color; 
     }
 
@@ -42,24 +49,17 @@ public class FodderEnemy : MonoBehaviour, iDamage
         }
     }
 
-    //private void OnCollisionEnter(Collision player)
-    //{
-    //    if(player.gameObject.CompareTag("Player"))
-    //    {
-    //        GameManager.Instance.PlayerScript.takeDamage(damage);
-    //        if (player.gameObject.GetComponent<PlayerMovement>().health <= 0)
-    //        {
-
-    //        }
-    //    }
-    //}
 
     public void takeDamage(int amount)
     {
         HP -= amount;
         StartCoroutine(flashColor());
+        Aud.PlayOneShot(RobotHit, AudrobotHitVol);
         if (HP <= 0)
         {
+            Aud.PlayOneShot(roboDeath, AudrobotDeathVol);
+            int GoldDropped =  Random.Range(1, 20);
+            GameManager.Instance.PlayerScript.Gold += GoldDropped; 
             Destroy(gameObject);
         }
 
@@ -72,6 +72,7 @@ public class FodderEnemy : MonoBehaviour, iDamage
         }
         if (IsWalking)
         {
+            Aud.PlayOneShot(Footsteps[Random.Range(0, Footsteps.Length)], AudFootSteps);
             agent.SetDestination(WalkPoint);
         }
 
