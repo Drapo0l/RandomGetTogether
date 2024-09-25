@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
     float healthPercentage;
     float safe;
 
+
     // Start is called before the first frame update
     void Awake()
     {
