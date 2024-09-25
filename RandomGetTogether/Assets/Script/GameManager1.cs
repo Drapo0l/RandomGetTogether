@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using JetBrains.Annotations;
 
 
 
@@ -14,6 +15,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] GameObject Menu_Pause; 
     [SerializeField] GameObject Menu_Lose;
     [SerializeField] GameObject GdmgB;
+
+    [SerializeField] public GameObject playerPrompt;
+    [SerializeField] public TMP_Text promptText;
+
+
     public Image Gdmg;
     public GameObject Menu_Start;
     public Image Player_HP_Bar;
@@ -62,7 +68,7 @@ public class GameManager : MonoBehaviour
             float healthPercentage = Player.GetComponent<PlayerMovement>().health / Player.GetComponent<PlayerMovement>().maxHealth;
             healthPercentage = healthPercentage * 100;
             Player_HP_Bar.fillAmount = healthPercentage; // Updates the health bar fill amount
-            Gdmg.color = new Color(255, 0, 0, 100 - healthPercentage);
+            //Gdmg.color = new Color(255, 0, 0, 100 - healthPercentage);
             //GoldC.text = gold.ToString("F0");
             
         }

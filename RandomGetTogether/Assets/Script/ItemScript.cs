@@ -6,7 +6,7 @@ public abstract class ItemScript : ScriptableObject
 {
     public string itemName;
     public Sprite ItemImage;
-
+    public bool isStackable = true;
 
 //Getters
     public abstract ItemScript GetItem();

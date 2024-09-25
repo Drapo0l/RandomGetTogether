@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
+
 
 public class ShopUI : MonoBehaviour
 {
@@ -12,16 +12,19 @@ public class ShopUI : MonoBehaviour
     [SerializeField] GameObject Inventory;
     [SerializeField] GameObject InventorySlot;
     [SerializeField] shopItems[] items;
-    
-    
+    [SerializeField] InventoryManager inventoryManager;
 
-   bool isOpen = false;
+
+
+    bool isOpen = false;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        if(StoreFront != null)
         StoreFront.gameObject.SetActive(false);
+        if (playerPrompt != null)
         playerPrompt.SetActive(false);
         showShop();
         
@@ -30,6 +33,7 @@ public class ShopUI : MonoBehaviour
 
     void showShop()
     {
+        
         for (int i = StoreMenu.transform.childCount - 1; i >= 0; i--)
         {
             Destroy(StoreMenu.transform.GetChild(i).gameObject);
