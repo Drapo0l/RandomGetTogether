@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:RandomGetTogether/Assets/Inventory.meta
+guid: e407a36f27063b04baf8b04736db8cd0
+========
 guid: 054a82c3c3f438547ab5fbcec201b4ba
+>>>>>>>> 690aecdd6c3cde737603360107e30e1d40dec75f:RandomGetTogether/Assets/Material/Materials.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

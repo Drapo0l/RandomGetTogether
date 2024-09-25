@@ -28,10 +28,11 @@ Application.Quit();
 
     public void Start_Button()
     {
-        GameManager.Instance.Player_HP_Bar.enabled = true;
-        GameManager.Instance.AmmoC.enabled = true;
-        GameManager.Instance.AmmoM.enabled = true;
-        GameManager.Instance.unpausedState();
         GameManager.Instance.Menu_Start.SetActive(false);
+        GameManager.Instance.A_Player_hp_bar.SetActive(true);
+        GameManager.Instance.ammoBox.SetActive(true);
+        GameManager.Instance.gold_box.SetActive(true);
+        GameManager.Instance.unpausedState();
+       
     }
 }
