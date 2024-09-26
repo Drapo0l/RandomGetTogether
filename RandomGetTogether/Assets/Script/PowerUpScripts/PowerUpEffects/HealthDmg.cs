@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "PowerUps/HealthBuff")]
+[CreateAssetMenu(menuName = "PowerUps/HealthDmg")]
 public class HealthDmg : PowerUpEffects
 {
     public int damageAmount;
@@ -11,6 +11,4 @@ public class HealthDmg : PowerUpEffects
         target.transform.parent.GetComponent<PlayerMovement>().takeDamage(damageAmount);
        
     }
-
-
 }

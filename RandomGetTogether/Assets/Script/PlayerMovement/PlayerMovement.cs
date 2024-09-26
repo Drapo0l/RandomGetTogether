@@ -395,13 +395,14 @@ public class PlayerMovement : MonoBehaviour,iDamage
 
     public void takeDamage(int amount)
     {
-        aud.PlayOneShot(audJump[Random.Range(0, audHurt.Length)], audHurtVol);
+        
         health -= amount;
         StartCoroutine(GameManager.Instance.dmgflash());
         if(health <= 0)
         {
            GameManager.Instance.Defeat();
         }
+        aud.PlayOneShot(audJump[Random.Range(0, audHurt.Length)], audHurtVol);
     }
 
 }

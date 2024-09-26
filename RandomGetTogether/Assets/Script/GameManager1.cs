@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        //StartG();
+        StartG();
     }
     public void UpdateHealthBar()
     {
@@ -126,8 +126,10 @@ public class GameManager : MonoBehaviour
     }
     public void pausedState() 
     {
+
         GdmgB.SetActive(false);
         PlayerScript.enabled = false;
+        Player.GetComponentInChildren<PlayerCamera>().enabled = false;
         Player.GetComponentInChildren<SwitchWeapons>().enabled = false;
         Player.GetComponentInChildren<ProjectileWeapons>().enabled=false;
         paused = !paused;
@@ -140,6 +142,7 @@ public class GameManager : MonoBehaviour
     {
         GdmgB.SetActive(true);
         PlayerScript.enabled = true;
+        Player.GetComponentInChildren<PlayerCamera>().enabled = true;
         Player.GetComponentInChildren<SwitchWeapons>().enabled = true;
         Player.GetComponentInChildren<ProjectileWeapons>().enabled = true;
         paused = !paused;
