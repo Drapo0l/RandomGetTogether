@@ -11,6 +11,7 @@ TagManager:
   - Weapon
   - SpikeBall
   - Teleport Shooter
+  - GrabObject
   layers:
   - Default
   - TransparentFX

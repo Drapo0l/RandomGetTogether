@@ -4,7 +4,9 @@ using UnityEngine;
 
 public class VoidLqt : MonoBehaviour,iDamage
 {
-    int health = 0;
+    int health = 10000;
+    [SerializeField] int attackDamage;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,6 +17,11 @@ public class VoidLqt : MonoBehaviour,iDamage
     void Update()
     {
         
+    }
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        iDamage damage = hit.transform.GetComponent<iDamage>();
+        damage.takeDamage(attackDamage);
     }
 
     public void takeDamage(int amount)

@@ -125,7 +125,7 @@ Transform:
   - {fileID: 4406535883467659651}
   - {fileID: 524903939784699175}
   m_Father: {fileID: 0}
-  m_RootOrder: 38
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4277290235480066695
 PrefabInstance:
@@ -411,6 +411,7 @@ MonoBehaviour:
   lazerDistance: 10
   lineRenderer: {fileID: 3890714112115122998}
   startPoint: {fileID: 3022139273977775764}
+  hitEffect: {fileID: 5024009746357069192, guid: a27001a0a05dc6b4890f0b760cd7c676, type: 3}
   SeeRayCast: 1
 --- !u!120 &3890714112115122998
 LineRenderer:

@@ -11,13 +11,10 @@ public class Lazer : MonoBehaviour, iDamage
 
     [SerializeField] LineRenderer lineRenderer;
     [SerializeField] Transform startPoint;
+    [SerializeField] ParticleSystem hitEffect;
 
     [SerializeField] bool SeeRayCast;
 
-    private void Start()
-    {
-      
-    }
 
 
     private void Update()
@@ -28,8 +25,7 @@ public class Lazer : MonoBehaviour, iDamage
 
         if (Physics.Raycast(transform.position, transform.forward, out rayHit))
         {
-
-            
+            Instantiate(hitEffect, rayHit.point, Quaternion.identity);
 
             if (rayHit.collider)
             {
@@ -38,6 +34,7 @@ public class Lazer : MonoBehaviour, iDamage
             }
             if (rayHit.transform.CompareTag("Player"))
             {
+                
                 iDamage damage = rayHit.transform.GetComponent<iDamage>();
                 damage.takeDamage(attackDamage);
             }
