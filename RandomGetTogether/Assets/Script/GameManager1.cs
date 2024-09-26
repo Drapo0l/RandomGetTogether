@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        //StartG();
+        StartG();
     }
     public void UpdateHealthBar()
     {
@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
         {
             healthPercentage = 0;
             safe = 0;
-            //hp_text.text = Player.GetComponent<PlayerMovement>().health.ToString("F0");
+            hp_text.text = Player.GetComponent<PlayerMovement>().health.ToString("F0");
             // Assuming PlayerScript has a 'health' and 'maxHealth' variable
             healthPercentage = Player.GetComponent<PlayerMovement>().health / Player.GetComponent<PlayerMovement>().maxHealth;
              safe = 70/100;
@@ -127,7 +127,9 @@ public class GameManager : MonoBehaviour
     public void pausedState() 
     {
         GdmgB.SetActive(false);
-        Player.SetActive(false);
+        PlayerScript.enabled = false;
+        Player.GetComponentInChildren<SwitchWeapons>().enabled = false;
+        Player.GetComponentInChildren<ProjectileWeapons>().enabled=false;
         paused = !paused;
         Time.timeScale = 0;
         Cursor.visible = true;
@@ -137,7 +139,9 @@ public class GameManager : MonoBehaviour
     public void unpausedState() 
     {
         GdmgB.SetActive(true);
-        Player.SetActive(true);
+        PlayerScript.enabled = true;
+        Player.GetComponentInChildren<SwitchWeapons>().enabled = true;
+        Player.GetComponentInChildren<ProjectileWeapons>().enabled = true;
         paused = !paused;
         Time.timeScale = timeScale_OG;
         Cursor.visible = false;
