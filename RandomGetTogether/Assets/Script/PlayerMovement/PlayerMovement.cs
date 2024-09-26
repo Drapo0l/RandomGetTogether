@@ -400,7 +400,7 @@ public class PlayerMovement : MonoBehaviour,iDamage
         StartCoroutine(GameManager.Instance.dmgflash());
         if(health <= 0)
         {
-           GameManager.Instance.updateGgoal();
+           GameManager.Instance.Defeat();
         }
     }
 
