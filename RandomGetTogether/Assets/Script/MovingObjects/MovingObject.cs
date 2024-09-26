@@ -13,8 +13,8 @@ public class MovingObject : MonoBehaviour
     int targetWaypointIndex;
      
     Transform targetWaypoint; 
-    Transform previousWayPoint; 
-     
+    Transform previousWayPoint;
+
 
     // Start is called before the first frame update
     void Start()
@@ -24,12 +24,20 @@ public class MovingObject : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (previousWayPoint == null || targetWaypoint == null)
+        {
+            Debug.LogError("Waypoints are not set correctly.");
+            return; // Exit if waypoints are not initialized
+        }
+
         elapsedTime += Time.deltaTime;
         float elapsedPercentage = elapsedTime / timeToWaypoint;
+
         if (SlowDownOnNextPoint)
         {
             elapsedPercentage = Mathf.SmoothStep(0, 1, elapsedPercentage);
         }
+
         transform.position = Vector3.Lerp(previousWayPoint.position, targetWaypoint.position, elapsedPercentage);
         transform.rotation = Quaternion.Lerp(previousWayPoint.rotation, targetWaypoint.rotation, elapsedPercentage);
 
@@ -42,8 +50,19 @@ public class MovingObject : MonoBehaviour
     void TargetNextWaypoint()
     {
         previousWayPoint = movingPatht.GetWayPoint(targetWaypointIndex);
+        if (previousWayPoint == null)
+        {
+            Debug.LogError($"Previous waypoint at index {targetWaypointIndex} is null!");
+            return; // Exit if previous waypoint is null
+        }
+
         targetWaypointIndex = movingPatht.GetNextWaypointIndex(targetWaypointIndex);
         targetWaypoint = movingPatht.GetWayPoint(targetWaypointIndex);
+        if (targetWaypoint == null)
+        {
+            Debug.LogError($"Target waypoint at index {targetWaypointIndex} is null!");
+            return; // Exit if target waypoint is null
+        }
 
         elapsedTime = 0;
 
@@ -53,11 +72,17 @@ public class MovingObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        other.transform.SetParent(transform);
+        if (other.CompareTag("Player"))
+        {
+            other.transform.SetParent(transform);
+        }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        other.transform.SetParent(null);
+        if (other.CompareTag("Player"))
+        {
+            other.transform.SetParent(null);
+        }
     }
 }
