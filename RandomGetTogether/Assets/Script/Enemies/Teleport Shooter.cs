@@ -61,8 +61,10 @@ public class TeleportShooter : MonoBehaviour, iDamage
     [SerializeField] AudioClip[] Footsteps;
     [SerializeField] float AudFootSteps;
 
+    bool isPlayingStop;
     void Start()
     {
+        isPlayingStop = false;
         colorOrig = Model.material.color;
         Anchor = GameObject.Find("SpawnPoint").transform;
         //Agent = GetComponent<NavMeshAgent>();
@@ -83,7 +85,7 @@ public class TeleportShooter : MonoBehaviour, iDamage
         }
         if (IsinSight && isinRange) // if in sight and range to attack, it would start shooting you
         {
-            Aud.PlayOneShot(RobotLaser, AudRobotLaser);
+            
             Shooting();
         }
         //if(PlayerRange && !CanseePlayer())
@@ -102,7 +104,7 @@ public class TeleportShooter : MonoBehaviour, iDamage
         }
         if (IsWalk) // if it is walking, it would search what its walk range is and move around in that range
         {
-            Aud.PlayOneShot(Footsteps[Random.Range(0, Footsteps.Length)], AudFootSteps);
+            if (!isPlayingStop) playSteps();
             Agent.SetDestination(WalkingPoint);
         }
 
@@ -168,6 +170,7 @@ public class TeleportShooter : MonoBehaviour, iDamage
         Agent.SetDestination(GameManager.Instance.Player.transform.position);
         if (!Isshooting)
         {
+            Aud.PlayOneShot(RobotLaser, AudRobotLaser);
             // Calculate the direction towards the player
             Vector3 shootDirection = (GameManager.Instance.Player.transform.position - Shotpostion.position).normalized;
 
@@ -287,7 +290,17 @@ public class TeleportShooter : MonoBehaviour, iDamage
         }
         Agent.stoppingDistance = 0; 
         return false;
-    } 
+    }
+
+    IEnumerator playSteps()
+    {
+        isPlayingStop = true;
+
+        //play walk sound
+        Aud.PlayOneShot(Footsteps[Random.Range(0, Footsteps.Length)], AudFootSteps);
+        yield return new WaitForSeconds(.8f);
+        isPlayingStop = false;
+    }
 
     void FaceTarget()
     {

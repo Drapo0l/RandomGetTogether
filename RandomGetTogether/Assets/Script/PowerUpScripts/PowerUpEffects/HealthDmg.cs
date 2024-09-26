@@ -8,7 +8,7 @@ public class HealthDmg : PowerUpEffects
     public int damageAmount;
     public override void Apply(GameObject target)
     {
-        target.transform.parent.GetComponent<PlayerMovement>().takeDamage(damageAmount);
+        target.transform.GetComponent<PlayerMovement>().takeDamage(damageAmount);
        
     }
 }

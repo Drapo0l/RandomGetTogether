@@ -47,9 +47,11 @@ public class Shootingboss : MonoBehaviour, iDamage
     [SerializeField] AudioClip[] Footsteps;
     [SerializeField] float AudFootSteps;
 
+    bool isPlayingStop;
 
     void Start()
     {
+        isPlayingStop = false;
         colorOrig = Model.material.color;
         Agent.SetDestination(GameManager.Instance.Player.transform.position);
     }
@@ -79,7 +81,7 @@ public class Shootingboss : MonoBehaviour, iDamage
         }
         if (isinSight && isinRange)   // if in sight and range to attack, it would start shooting you
         {
-            Aud.PlayOneShot(RobotLaser, AudRobotLaser);
+            
             Shooting();
 
         }
@@ -125,6 +127,7 @@ public class Shootingboss : MonoBehaviour, iDamage
         Agent.SetDestination(GameManager.Instance.Player.transform.position);
         if (!Isshooting)
         {
+            Aud.PlayOneShot(RobotLaser, AudRobotLaser);
             // Calculate the direction towards the player
             Vector3 shootDirection = (GameManager.Instance.Player.transform.position - Shotpostion.position).normalized;
 
@@ -183,7 +186,7 @@ public class Shootingboss : MonoBehaviour, iDamage
         }
         if (IsWalking) // if it is walking, it would search what its walk range is and move around in that range
         {
-            Aud.PlayOneShot(Footsteps[Random.Range(0, Footsteps.Length)], AudFootSteps);
+            if (!isPlayingStop) playSteps();
             Agent.SetDestination(WalkPoint);
         }
 
@@ -209,6 +212,15 @@ public class Shootingboss : MonoBehaviour, iDamage
     public void Chasing()
     {
         Agent.SetDestination(GameManager.Instance.Player.transform.position); // Chases the player
+    }
+    IEnumerator playSteps()
+    {
+        isPlayingStop = true;
+
+        //play walk sound
+        Aud.PlayOneShot(Footsteps[Random.Range(0, Footsteps.Length)], AudFootSteps);
+        yield return new WaitForSeconds(.8f);
+        isPlayingStop = false;
     }
 
     private void ResetShooting()

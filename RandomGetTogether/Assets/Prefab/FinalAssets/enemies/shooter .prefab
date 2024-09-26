@@ -124,6 +124,18 @@ PrefabInstance:
       propertyPath: Footsteps.Array.data[8]
       value: 
       objectReference: {fileID: 8300000, guid: af11c4ff5ffb5f64ca583b3825de610c, type: 3}
+    - target: {fileID: 7267263333273627816, guid: 2e197840f286811478032c35055f0806, type: 3}
+      propertyPath: m_Height
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267263333273627816, guid: 2e197840f286811478032c35055f0806, type: 3}
+      propertyPath: m_Radius
+      value: 0.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7267263333273627816, guid: 2e197840f286811478032c35055f0806, type: 3}
+      propertyPath: m_Center.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9083013613342095147, guid: 2e197840f286811478032c35055f0806, type: 3}
       propertyPath: m_Name
       value: 'shooter '

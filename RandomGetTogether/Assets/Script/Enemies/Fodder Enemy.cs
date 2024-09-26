@@ -28,9 +28,10 @@ public class FodderEnemy : MonoBehaviour, iDamage
     [SerializeField] AudioClip[] Footsteps;
     [SerializeField] float AudFootSteps;
 
-
+    bool isPlayingStop;
     void Start()
     {
+        isPlayingStop = false;
         colorOrig = Model.material.color; 
     }
 
@@ -82,7 +83,7 @@ public class FodderEnemy : MonoBehaviour, iDamage
         }
         if (IsWalking)
         {
-            Aud.PlayOneShot(Footsteps[Random.Range(0, Footsteps.Length)], AudFootSteps);
+            if (!isPlayingStop) playSteps();
             agent.SetDestination(WalkPoint);
         }
 
@@ -108,6 +109,16 @@ public class FodderEnemy : MonoBehaviour, iDamage
     public void Chase()
     {
         agent.SetDestination(GameManager.Instance.Player.transform.position); 
+    }
+
+    IEnumerator playSteps()
+    {
+        isPlayingStop = true;
+
+        //play walk sound
+        Aud.PlayOneShot(Footsteps[Random.Range(0, Footsteps.Length)], AudFootSteps);
+        yield return new WaitForSeconds(.8f);
+        isPlayingStop = false;
     }
 
     IEnumerator flashColor()

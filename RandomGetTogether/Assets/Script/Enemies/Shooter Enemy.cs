@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using static PlayerMovement;
 
 
 
@@ -47,10 +48,11 @@ public class ShooterEnemy : MonoBehaviour, iDamage
     [SerializeField] AudioClip[] Footsteps;
     [SerializeField] float AudFootSteps;
 
+    bool isPlayingStop;
     void Start() 
     {
-   
-  
+
+        isPlayingStop = false;
         colorOrig = Model.material.color;
     }
 
@@ -71,7 +73,7 @@ public class ShooterEnemy : MonoBehaviour, iDamage
         }
         if (isinSight && isinRange)   // if in sight and range to attack, it would start shooting you
         {
-            Aud.PlayOneShot(RobotLaser, AudRobotLaser);
+            
             Shooting();
 
         }
@@ -109,6 +111,7 @@ public class ShooterEnemy : MonoBehaviour, iDamage
 
     private void InstantiateBullet(Vector3 directionToPlayer)
     {
+        
 
         // Make the enemy face the player
         Quaternion lookRotation = Quaternion.LookRotation(directionToPlayer);
@@ -117,6 +120,7 @@ public class ShooterEnemy : MonoBehaviour, iDamage
         Agent.SetDestination(GameManager.Instance.Player.transform.position);
         if (!Isshooting)
         {
+            Aud.PlayOneShot(RobotLaser, AudRobotLaser);
             // Calculate the direction towards the player
             Vector3 shootDirection = (GameManager.Instance.Player.transform.position - Shotpostion.position).normalized;
 
@@ -174,7 +178,7 @@ public class ShooterEnemy : MonoBehaviour, iDamage
         }
         if (IsWalking) // if it is walking, it would search what its walk range is and move around in that range
         {
-            Aud.PlayOneShot(Footsteps[Random.Range(0, Footsteps.Length)], AudFootSteps);  
+            if(!isPlayingStop) playSteps();
             Agent.SetDestination(WalkPoint);
         }
 
@@ -197,6 +201,17 @@ public class ShooterEnemy : MonoBehaviour, iDamage
         }
 
     }
+
+    IEnumerator playSteps()
+    {
+        isPlayingStop = true;
+
+        //play walk sound
+        Aud.PlayOneShot(Footsteps[Random.Range(0, Footsteps.Length)], AudFootSteps);        
+        yield return new WaitForSeconds(.8f);
+        isPlayingStop = false;
+    }
+
     public void Chasing()
     {
         Agent.SetDestination(GameManager.Instance.Player.transform.position); // Chases the player
