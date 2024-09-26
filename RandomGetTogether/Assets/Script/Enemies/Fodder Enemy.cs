@@ -49,6 +49,16 @@ public class FodderEnemy : MonoBehaviour, iDamage
         }
     }
 
+    private void OnTriggerEnter(Collider collision)
+    {
+        iDamage hit = collision.GetComponent<iDamage>();
+        if (hit != null) hit.takeDamage(damage);
+        else if (collision.GetComponentInParent<iDamage>() != null)
+        {
+            hit = collision.GetComponentInParent<iDamage>();
+            hit.takeDamage(damage);
+        }
+    }
 
     public void takeDamage(int amount)
     {
