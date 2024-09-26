@@ -121,8 +121,6 @@ public class PlayerMovement : MonoBehaviour,iDamage
             else
                 rb.drag = 0;
 
-            if(grounded && moveDirection.magnitude > 0.3f && !isPlayingStop)
-                StartCoroutine(playSteps());
     }
 
     private void FixedUpdate()
@@ -231,11 +229,13 @@ public class PlayerMovement : MonoBehaviour,iDamage
             if (keepMomentum)
             {
                StopAllCoroutines();
+                isPlayingStop = false;
                 StartCoroutine(SmoothlyLerpMoveSpeed());
             }
             else
             {
                 StopAllCoroutines();
+                isPlayingStop = false;
                 moveSpeed = desiredMoveSpeed;
             }
         }
@@ -296,19 +296,23 @@ public class PlayerMovement : MonoBehaviour,iDamage
         {
             rb.AddForce(GetSlopeMoveDirection(moveDirection) * moveSpeed * 20f, ForceMode.Force);
 
+
             if (rb.velocity.y > 0)
                 rb.AddForce(Vector3.down * 80f, ForceMode.Force);
+
         }
 
         //on Ground
         else if (grounded)
         {
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);        
+            rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+            if (!isPlayingStop && moveDirection.magnitude > 0.3f && grounded)
+                StartCoroutine(playSteps());
         }
 
         //in air
         else if (!grounded)
-            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
+            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);            
 
         //turn gravity off while on slope
         rb.useGravity = !OnSlope();
@@ -377,17 +381,10 @@ public class PlayerMovement : MonoBehaviour,iDamage
 
         //play walk sound
         aud.PlayOneShot(audWalk[Random.Range(0, audWalk.Length)], audWalkVol);
-
-        if(state == MovementState.walking)
-        {
-            yield return new WaitForSeconds(.8f);
-           
-        }
+        if(MovementState.walking == state)
+            yield return new WaitForSeconds(.8f);           
         else
-        {
             yield return new WaitForSeconds(.3f);
-           
-        }
         isPlayingStop = false;
     }
 

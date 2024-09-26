@@ -49,8 +49,8 @@ public class GameManager : MonoBehaviour
     float safe;
     [Header("audio")]
     public AudioClip[] AUDclick; 
-    [SerializeField] float AUDclickV;
-
+   public float AUDclickV;
+    public AudioSource playerADU;
 
     // Start is called before the first frame update
     void Awake()
@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
         Player = GameObject.FindWithTag("Player");
         TeleportAnchor = GameObject.FindWithTag("SpawnPoint"); 
         PlayerScript = Player.GetComponent<PlayerMovement>();
-      
+        
 
 
     }
@@ -76,7 +76,7 @@ public class GameManager : MonoBehaviour
         {
             healthPercentage = 0;
             safe = 0;
-           hp_text.text = Player.GetComponent<PlayerMovement>().health.ToString("F0");
+            //hp_text.text = Player.GetComponent<PlayerMovement>().health.ToString("F0");
             // Assuming PlayerScript has a 'health' and 'maxHealth' variable
             healthPercentage = Player.GetComponent<PlayerMovement>().health / Player.GetComponent<PlayerMovement>().maxHealth;
              safe = 70/100;

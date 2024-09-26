@@ -50,6 +50,17 @@ public class TeleportShooter : MonoBehaviour, iDamage
     Vector3 PlayerDir;
     float AngleToPlayer;
     float stoppingDistOrig;
+
+    [SerializeField] AudioSource Aud;
+    [SerializeField] AudioClip roboDeath;
+    [SerializeField] float AudrobotDeathVol;
+    [SerializeField] AudioClip RobotHit;
+    [SerializeField] float AudrobotHitVol;
+    [SerializeField] AudioClip RobotLaser; 
+    [SerializeField] float AudRobotLaser;
+    [SerializeField] AudioClip[] Footsteps;
+    [SerializeField] float AudFootSteps;
+
     void Start()
     {
         colorOrig = Model.material.color;
@@ -72,15 +83,16 @@ public class TeleportShooter : MonoBehaviour, iDamage
         }
         if (IsinSight && isinRange) // if in sight and range to attack, it would start shooting you
         {
-           Shooting();
+            Aud.PlayOneShot(RobotLaser, AudRobotLaser);
+            Shooting();
         }
-        if(PlayerRange && !CanseePlayer())
-        {
-            if (!Isroaming && Agent.remainingDistance < 0.05f)
-            {
-                StartCoroutine(roam());
-            }
-        }
+        //if(PlayerRange && !CanseePlayer())
+        //{
+        //    //if (!Isroaming && Agent.remainingDistance < 0.05f)
+        //    //{
+        //    //    StartCoroutine(roam());
+        //    //}
+        //}
     }
     public void Patroling()
     {
@@ -90,6 +102,7 @@ public class TeleportShooter : MonoBehaviour, iDamage
         }
         if (IsWalk) // if it is walking, it would search what its walk range is and move around in that range
         {
+            Aud.PlayOneShot(Footsteps[Random.Range(0, Footsteps.Length)], AudFootSteps);
             Agent.SetDestination(WalkingPoint);
         }
 
@@ -126,6 +139,7 @@ public class TeleportShooter : MonoBehaviour, iDamage
         if (Physics.Raycast(transform.position, directionToPlayer, out hit, Shootrange))
         {
             Transform Parent = hit.transform.parent;
+      
             // Check if the raycast hit the player
             if (hit.transform.CompareTag("Player") || Parent != null)
             {
@@ -201,8 +215,13 @@ public class TeleportShooter : MonoBehaviour, iDamage
         StartCoroutine(flashColor());
         flashColor();
         Teleport();
+        Aud.PlayOneShot(RobotHit, AudrobotHitVol);
         if (HP <= 0)
         {
+            Aud.PlayOneShot(roboDeath, AudrobotDeathVol);
+
+            int GoldDropped = Random.Range(1, 20);
+            GameManager.Instance.PlayerScript.Gold += GoldDropped;
             Destroy(gameObject);
         }
 

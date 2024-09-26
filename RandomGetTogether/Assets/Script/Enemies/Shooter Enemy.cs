@@ -16,7 +16,6 @@ public class ShooterEnemy : MonoBehaviour, iDamage
 
     [Header("Bullet")]
     [SerializeField] Transform Shotpostion;
-    [SerializeField] GameObject Muscle;
     [SerializeField] GameObject Bullet;
     [SerializeField] float shootrate;
     [SerializeField] float shootForce;
@@ -36,7 +35,18 @@ public class ShooterEnemy : MonoBehaviour, iDamage
     [SerializeField] float Shootrange;
     bool isinSight;
     bool isinRange;
-    // Start is called before the first frame update
+
+    // Audio 
+    [SerializeField] AudioSource Aud; 
+    [SerializeField] AudioClip roboDeath;
+    [SerializeField] float AudrobotDeathVol; 
+    [SerializeField] AudioClip RobotHit;
+    [SerializeField] float AudrobotHitVol;
+    [SerializeField] AudioClip RobotLaser;
+    [SerializeField] float AudRobotLaser;
+    [SerializeField] AudioClip[] Footsteps;
+    [SerializeField] float AudFootSteps;
+
     void Start() 
     {
    
@@ -60,7 +70,8 @@ public class ShooterEnemy : MonoBehaviour, iDamage
             Chasing();
         }
         if (isinSight && isinRange)   // if in sight and range to attack, it would start shooting you
-        { 
+        {
+            Aud.PlayOneShot(RobotLaser, AudRobotLaser);
             Shooting();
 
         }
@@ -77,6 +88,7 @@ public class ShooterEnemy : MonoBehaviour, iDamage
         if (Physics.Raycast(transform.position, directionToPlayer, out hit, Shootrange))
         {
             Transform Parent = hit.transform.parent;
+         
             // Check if the raycast hit the player
             if (hit.transform.CompareTag("Player") || Parent != null)
             {
@@ -143,8 +155,12 @@ public class ShooterEnemy : MonoBehaviour, iDamage
         HP -= amount;
         StartCoroutine(flashColor());
         flashColor();
+        Aud.PlayOneShot(RobotHit, AudrobotHitVol);
         if (HP <= 0)
         {
+            Aud.PlayOneShot(roboDeath, AudrobotDeathVol); 
+            int GoldDropped = Random.Range(1, 20);
+            GameManager.Instance.PlayerScript.Gold += GoldDropped;
             Destroy(gameObject);
         }
 
@@ -158,6 +174,7 @@ public class ShooterEnemy : MonoBehaviour, iDamage
         }
         if (IsWalking) // if it is walking, it would search what its walk range is and move around in that range
         {
+            Aud.PlayOneShot(Footsteps[Random.Range(0, Footsteps.Length)], AudFootSteps);  
             Agent.SetDestination(WalkPoint);
         }
 
