@@ -65,7 +65,7 @@ public class FodderEnemy : MonoBehaviour, iDamage
 
     }
     public void Patroling()
-    { 
+    {  
         if (!IsWalking) 
         {
             SearchWalkpath();
