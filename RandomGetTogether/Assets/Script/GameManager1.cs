@@ -67,7 +67,7 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        StartG();
+        //StartG();
     }
     public void UpdateHealthBar()
     {
