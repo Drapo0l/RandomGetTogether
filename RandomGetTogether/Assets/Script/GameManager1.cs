@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
                 Gdmg.color = new Color(255, 0, 0, safe);
             }
            
-            //GoldC.text = gold.ToString("F0");
+            GoldC.text = gold.ToString("F0");
             
         }
     }
